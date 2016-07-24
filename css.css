@@ -1,0 +1,136 @@
+body{
+	background-image:url("sfondo.jpg");
+	color: white;
+	text-width: bold;
+	text-shadow: black 2px 2px 5px;
+	font-family:"Palatino Linotype", "Book Antiqua", Palatino, serif;
+}
+input[type=text],input[type=email],input[type=password],select {
+	max-width: 200px ;
+	font-size:18px;
+	padding: 12px 20px;
+	margin: 8px;
+	box-sizing: border-box;
+	border-radius:5px;
+	border: 3px solid #ccc;
+	-webkit-transition: 0.5s;
+	transition: 0.5s;
+	outline: none;
+}
+
+input[type=text]:focus,input[type=email]:focus,input[type=password]:focus {
+			border: 3px solid #555;
+}
+
+a:link{
+	text-decoration:none;
+	color: white;
+}
+a:visited{
+	text-decoration:none;
+	color: white;
+}
+a:hover{
+	text-decoration:none;
+	color: #ccccff;
+	text-shadow: black 4px 4px 4px;
+}
+a:active{
+	text-decoration:none;
+	color: white;
+}
+
+.button {
+	background-image: #000099;
+	background:linear-gradient(#000099,#000066);
+	border: none;
+	border-radius: 10px;
+	color: white;
+	font-family:"Palatino Linotype", "Book Antiqua", Palatino, serif;
+	text-shadow: black 2px 2px 2px;
+	padding: 15px 32px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	margin: 4px 2px;
+	cursor: pointer;
+	transition-duration: 0.4s;
+	}		
+		
+.button:hover {
+	box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+	background-color: #000080
+}
+
+.button:active {
+		background-color: #00004d;
+		box-shadow: 0 5px 5px #000033;
+		transform: translateY(4px);
+}		
+
+h1{
+	
+	
+}
+
+ul {
+    list-style-type: none;
+    margin: 0 auto;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+	position: relative;
+    top: 0;
+    width: 100%;
+}
+
+li {
+    float: left;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 18px 30px;
+    text-decoration: none;
+}
+
+li a:hover:not(.active) {
+    background-color: #111;
+}
+
+.active {
+    background-color:#000099;
+}
+
+.search_box{
+	 
+}
+
+#search input[type=text]{
+	background: url(search-white.png) no-repeat 10px 6px #267bb6;
+	outline:none;
+	border:0 none;
+	font:bold 12px Arial, Hevetica, Sans-serif;
+	width:350px;
+	padding: 6px 15px 6px 35px;
+	text-shadow:0 2px 2px rgba(0,0,0,0.3);
+	box-shadow:0 1px 0 rgba(255, 255,255,0.1), 0 1px 3px rgba(0,0,0,0.2) inset;
+	transition: all 0.7s ease 0s;
+}
+
+#search input[type=text]:focus{
+	background: url(search-dark.png) no-repeat 10px 6px #fcfcfc;
+	color: #6a6f75;
+	width: 350px;
+	box-shadow: 0 1px 0 rgba(255,255,255,0.1), 0 1px 0 rgba(0,0,0,0.9) inset;
+	text-shadow: 0 2px 3px rgba(0,0,0,0.1);
+}
+	
+
+	
+
+
+
