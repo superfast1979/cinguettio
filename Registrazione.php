@@ -5,6 +5,8 @@ require_once("utility.php");
 
 $errore = "";
 
+$prova = "";
+
 if (isset($_POST['ok'])) {
     $email = addslashes($_POST['mail']);
     $user = addslashes($_POST['nick']);
