@@ -1,6 +1,6 @@
 <?php
     session_start();
-    require_once("header.php");
+    require_once("database.php");
 	session_set_cookie_params (0, "/", ".cinguettio.it");
 	if (!isset($_SESSION['nick']) || !isset($_SESSION['pwd'])) {
 		echo "Non sei connesso!";
