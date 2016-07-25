@@ -15,6 +15,7 @@ if (!isset($_SESSION['email']) || !isset($_SESSION['pwd'])) {
     // fare query per recuperare la lista dei cinguettii degli utenti seguiti
     // ordinarli per data
     // fare un loop per stampare l'id e il tipo di cinguettio
+    // $results = db_query("SELECT ---- ");
     // STEP 2
     // per ogni id di cinguettio e tipo preleviamo le info dalla tabella relativa
     // e stampiamo il contenuto.
@@ -41,39 +42,52 @@ if (!isset($_SESSION['email']) || !isset($_SESSION['pwd'])) {
             <input type="submit" value="Invia">
         </form>
 
-<?php
-if (isset($_POST['Invia'])) {
+        <?php
+        while ($row = mysqli_fetch_array($results)) {
+            $id = $row["idProg"];
+            $tipo = $row["tipoCinguettio"];
+            ?>
+            <p><?php echo $id; echo $tipo; ?></p>
+            <?php
+        }
+        if (isset($_POST['Invia'])) {
 
-    $sql = "SELECT MAX(IdProg) FROM Cinguettio c,Utente u WHERE c.email=u.email";
-    $res = mysql_query($sql, $cid);
-    if (is_null($res) == TRUE)
-        $contaid = 0;
-    else
-        $contaid = $contaid + 1;
+            $sql = "SELECT MAX(IdProg) FROM Cinguettio c,Utente u WHERE c.email=u.email";
+            $res = mysql_query($sql, $cid);
+            if (is_null($res) == TRUE)
+                $contaid = 0;
+            else
+                $contaid = $contaid + 1;
 
-    $testo = addslashes($_POST['cintesto']);
-    $id = addslashes($contaid);
-    $email = addslashes($_POST['mail']);
-    $data = addslashes(date("d/m/Y"));
-    $sql = "insert into cinguettio (IdProg, Email, DataCreazione) values ('$id', '$email', '$data');";
-    $res = mysql_query($sql, $cid) or die("Errore " . mysql_error());
-    $sql = "insert into testo (IdProg, Testo) values ('$id', '$testo');";
-    $res = mysql_query($sql, $cid) or die("Errore " . mysql_error());
-}
-?>
+            $testo = addslashes($_POST['cintesto']);
+            $id = addslashes($contaid);
+            $email = addslashes($_POST['mail']);
+            $data = addslashes(date("d/m/Y"));
+            $sql = "insert into cinguettio (IdProg, Email, DataCreazione) values ('$id', '$email', '$data');";
+            $res = mysql_query($sql, $cid) or die("Errore " . mysql_error());
+            $sql = "insert into testo (IdProg, Testo) values ('$id', '$testo');";
+            $res = mysql_query($sql, $cid) or die("Errore " . mysql_error());
+        }
+        ?>
 
         Lista Cinguettii pubblicati in ordine (in alto meno recente)
 
-<?php
-$sql = "SELECT * FROM Cinquettio NATURAL JOIN Testo";
-$res = mysql_query($sql, $cid);
-if ($res && mysql_num_rows($res) > 0) {
-    while ($row = mysql_fetch_assoc($res)) {
-        echo $row[‘ID’]." <br> ";
+        <?php
+        $sql = "SELECT * FROM Cinquettio NATURAL JOIN Testo";
+        $res = mysql_query($sql, $cid);
+        if ($res && mysql_num_rows($res) > 0) {
+            while ($row = mysql_fetch_assoc($res)) {
+                echo $row[‘ID’]." <br> ";
 					echo $row[‘Testo’]." <br> ";
-        echo $row[‘Data’]." <br><br><br>
-        
-            ";
+                echo $row[‘Data’]." <br><br><br>
+
+
+
+
+
+
+                
+                    ";
 				}
 			} else
 			echo "nessun risultato";
