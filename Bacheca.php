@@ -1,7 +1,5 @@
 <?php
-    session_start();
-    
-    
+    session_start(); 
     require_once("header.php");
 	session_set_cookie_params (0, "/", ".cinguettio.it");
 	if (!isset($_SESSION['email']) || !isset($_SESSION['pwd'])) {
