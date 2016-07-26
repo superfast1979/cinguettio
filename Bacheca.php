@@ -5,7 +5,7 @@ if (!isset($_SESSION['email']) || !isset($_SESSION['pwd'])) {
     echo "Non sei connesso!";
     die;
 } 
-?>
+
     // TODO
     // STEP 1
     // recuperare l'utente loggato da $_SESSION['email']
@@ -13,9 +13,11 @@ if (!isset($_SESSION['email']) || !isset($_SESSION['pwd'])) {
     // fare query per recuperare la lista dei cinguettii degli utenti seguiti
     // ordinarli per data
     // fare un loop per stampare l'id e il tipo di cinguettio
+    // $results = db_query("SELECT ---- ");
     // STEP 2
     // per ogni id di cinguettio e tipo preleviamo le info dalla tabella relativa
     // e stampiamo il contenuto
+?>
 
 <title>Bacheca</title>
 <head>
