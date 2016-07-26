@@ -38,20 +38,62 @@ if (!isset($_SESSION['email']) || !isset($_SESSION['pwd'])) {
         <input type="submit" value="Invia">
     </form>
         
-    <?php    $email=$_SESSION[email];
+    <?php    
+    $email=$_SESSION['email'];
+    $br= "<br>";
     
-    $sql= "SELECT DISTINCT u.email, c.id, l.nomeL
+    $sql= "SELECT DISTINCT u.email, c.dataOraCreazione, l.nomeL
             FROM segue s, utente u, luogo l, cinguettio c
-            WHERE (s.utenteCheSegue=$email AND s.utenteSeguito=u.email 
+            WHERE (s.utenteCheSegue='$email' AND s.utenteSeguito=u.email 
                 AND c.email=u.email AND c.id=l.id)
-            OR (s.utenteCheSegue=$email AND s.utenteCheSegue=u.email
+            OR (s.utenteCheSegue='$email' AND s.utenteCheSegue=u.email
                 AND c.email=u.email AND c.id=l.id)	
             ORDER BY c.dataOraCreazione DESC";
     
-        if ($result = mysqli_query($mysqli, $sql)) {
+        if ($result = db_query($sql)) {
             printf("Select returned %d rows.\n", mysqli_num_rows($result));
+            while ($row = mysqli_fetch_assoc($result)) {
+                printf ("$br %s %s %s", $row['email'], $row['dataOraCreazione'], $row['nomeL']);
+            }
             mysqli_free_result($result);
         }
+    
+    $sql= "SELECT DISTINCT u.email, c.dataOraCreazione, t.testo
+            FROM segue s, utente u, testo t, cinguettio c
+            WHERE (s.utenteCheSegue='luca.ferrari@gmail.com' AND s.utenteSeguito=u.email 
+                AND c.email=u.email AND c.id=t.id)
+            OR (s.utenteCheSegue='luca.ferrari@gmail.com' AND s.utenteCheSegue=u.email
+                AND c.email=u.email AND c.id=t.id)
+            ORDER BY c.dataOraCreazione DESC";
+    
+        if ($result = db_query($sql)) {
+            printf("Select returned %d rows.\n", mysqli_num_rows($result));
+            while ($row = mysqli_fetch_assoc($result)) {
+                printf ("$br %s %s %s", $row['email'], $row['dataOraCreazione'], $row['testo']);
+            }
+            mysqli_free_result($result);
+        }
+        
+        
+    $sql= "SELECT DISTINCT u.email, c.dataOraCreazione, f.nomeF, f.path, f.descrizione
+		FROM segue s, utente u, foto f, cinguettio c
+		WHERE (s.utenteCheSegue='luca.ferrari@gmail.com' AND s.utenteSeguito=u.email 
+				AND c.email=u.email
+				AND c.id=f.id)
+			OR (s.utenteCheSegue='luca.ferrari@gmail.com' AND s.utenteCheSegue=u.email
+				AND c.email=u.email
+				AND c.id=f.id)
+		ORDER BY c.dataOraCreazione DESC";
+    
+        if ($result = db_query($sql)) {
+            printf("Select returned %d rows.\n", mysqli_num_rows($result));
+            while ($row = mysqli_fetch_assoc($result)) {
+                printf ("$br %s %s %s", $row['email'], $row['dataOraCreazione'], $row['nomeF'],
+                        $row['path'], $row['descrizione']);
+            }
+            mysqli_free_result($result);
+        }
+        
     ?>
 </body>
 
