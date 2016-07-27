@@ -25,10 +25,10 @@ if (isset($_POST['ok'])) {
     }
 }
 ?>
-<head>
-    <title>Login</title>
-    <link rel="stylesheet" type="text/css" href="css2.css">
-</head>
+<?php
+$_SESSION['title'] = "Login";
+include("head.php");
+?>
 
 <body>
     <div align="center">Cinguettio</div>		

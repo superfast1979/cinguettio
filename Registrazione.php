@@ -31,10 +31,10 @@ if (isset($_POST['ok'])) {
     }
 }
 ?>
-<head>
-    <title>Registrazione</title>
-    <link rel="stylesheet" type="text/css" href="css2.css">
-</head>
+  <?php
+    $_SESSION['title'] = "Registrazione";
+    include("head.php");
+    ?>
 <body>
     <form method="post" action="Registrazione.php">
         Compila i seguenti campi per accedere a Cinguettio
