@@ -49,9 +49,9 @@ if (isset($_POST['ok'])) {
                     </div>
                 </h1>
                 <div class="form-group">
-                    <label for="inputNicknamel3" class="col-sm-2 control-label">Nickname</label>
+                    <label for="inputNickname3" class="col-sm-2 control-label">Nickname</label>
                     <div class="col-sm-10">
-                        <input type="text" name="nickname" class="form-control" id="inputNicknamel3">
+                        <input type="text" name="nickname" class="form-control" id="inputNickname3">
                     </div>
                 </div>
                 

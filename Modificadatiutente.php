@@ -1,92 +1,182 @@
 <?php
-    session_start();
-    require_once("header.php");
-    session_set_cookie_params (0, "/", ".cinguettio.it");
-	if (!isset($_SESSION['nick']) || !isset($_SESSION['pwd'])) {
-		echo "Non sei connesso!";
-		die;
-	}
+session_start();
+require_once("database.php");
+if (!isset($_SESSION['email']) || !isset($_SESSION['pwd'])) {
+    echo "Non sei connesso!";
+    die;
+}
+
+$errore = "";
+$prova = "";
+$email=$_SESSION['email'];
+
+if (isset($_POST['ok'])) {
+    $nome = addslashes($_POST['nome']);
+    $cognome = addslashes($_POST['cognome']);
+    $nickname = addslashes($_POST['nickname']);
+    $password = addslashes($_POST['pwd']);
+    $confpassword= addslashes($_POST['confpwd']);
+    $hobby = addslashes($_POST['hobby']);
+    $dataNascita = addslashes($_POST['dataNascita']);
+    $sesso = addslashes($_POST['sesso']);
+    $statoN = addslashes($_POST['statoN']);
+    $regioneN = addslashes($_POST['regioneN']);
+    $cittaN = addslashes($_POST['cittaN']);
+    $nomeC = addslashes($_POST['nomeC']);
+    
+
+    if ($password == $confpassword) {
+
+        $sql = "UPDATE `utente` SET (nome='$nome', cognome='$cognome', nickname='$nickname',"
+                . "password='$pwd', confpassword='$confpwd', hobby='$hobby',"
+                . "dataNascita='$dataNascita', sesso='$sesso', statoN='$statoN',"
+                . "regioneN='$regioneN', cittaN='$cittaN', nomeC='$nomeC') "
+                . "WHERE email='$email'";
+
+        if ($result = db_query($sql)) {
+            header("location: DatiUtente.php");
+        } else {
+            $errore = db_error();
+        }
+    } else {
+        if ($password != $confpassword) {
+            $errore = "La password Ã¨ diversa";
+        } else {
+            $errore = "Errore";
+        }
+    }
+}
 ?>
-<html>
-	<head>
-		<title>Registrazione</title>
-		<link rel="stylesheet" type="text/css" href="css.css">
-		<script type= "text/javascript" src ="countries.js"></script>
-	</head>
-	<body>
-		<ul>
-				<li><a href="Bacheca.php">Bacheca</a></li>
-				<li><a class="active" href="Datiutente.php">Dati Utente</a></li>
-				<li><a href="Chiseguo.php">Chi Seguo</a></li>
-				<li><a href="Chimisegue.html">Chi Mi Segue</a></li>
-				<li><a href="Logout.php">Logout</a></li>
-		</ul>
-		
-		<form method="post" action="Modificadatiutente.php">
-			Modifica i tuoi dati personali
-			<table>
-				<tr>
-					<td>Nome: </td><td> <input type = "text" name = "nome"></td>
-				</tr>
-				<tr>
-					<td>Cognome: </td><td> <input type = "text" name = "cognome"></td>
-				</tr>
-				<tr>
-					<td>Data di Nascita(gg/mm/aaaa): </td><td> <input type = "text" name = "dataNascita"></td>
-				</tr>
-				<tr>
-					<td>Luogo di Nascita: </td><td> <input type="text" name="luogoNascita"></td>
-				</tr>
-				<tr>
-					<td>Sesso:</td>
-					<td>
-						<input type="radio" name="sesso" value="M">M
-                        <input type="radio" name="sesso" value="F">F
-					</td>
-				</tr>
-				<tr>
-					<td>Hobby:</td><td> <input type = "text" name = "hobby"></td>
-				</tr>
-			</table>
-			Città di resisenza:
-			<table>
-				<tr>
-					<td>Città:</td><td> <input type = "text" name = "citta"></td>
-				</tr>
-				<tr>
-					<td>Prefisso Telefonico:</td><td> <input type = "text" name = "preftel"></td>
-				</tr>
-				<tr>
-					<td>Targa:</td><td> <input type = "text" name = "targa"></td>
-				</tr>
-				<tr>
-					<td>CAP:</td><td> <input type = "text" name = "cap"></td>
-				</tr>
-			</table>
-			 
-						
-			<button class="button button" input type= "submit" name="ok">Salva</button>
-			<button class="button button" input type = "reset" name="cancella">Cancella Tutto</button>
-		</form>
-	</body>
-</html>
-<?php
-    if (isset ($_POST['ok'])) {
-        $nome=addslashes($_POST['nome']);
-		$cognome=addslashes($_POST['cognome']);
-		$dataNascita=addslashes($_POST['dataNascita']);
-		$luogoNascita=addslashes($_POST['luogoNascita']);
-		$sesso=addslashes($_POST['sesso']);
-		$hobby=addslashes($_POST['hobby']);
-		$citta=addslashes($_POST['citta']);
-		$preftel=addslashes($_POST['preftel']);
-		$targa=addslashes($_POST['targa']);
-		$cap=addslashes($_POST['cap']);
-		$sql="INSERT INTO Citta (NomeC, PrefissoTel, Targa, CAP) values ('$citta', '$preftel', '$targa', '$cap');";
-		$res=mysql_query($sql,$cid) or die( "Errore " .mysql_error()); 
-		$sql="UPDATE Utente SET Nome='$nome', Cognome='$cognome', DataNascita='$dataNascita', LuogoNascita='$luogoNascita', Sesso='$sesso', Hobby='$hobby' WHERE Nickname='$_SESSION[nick]' AND Pswd='$_SESSION[pwd]'"; 
-		$res=mysql_query($sql,$cid) or die( "Errore " .mysql_error());    
-	}
-	
-	header("location: Datiutente.php");
-?>
+  <?php
+    $_SESSION['title'] = "Modifica Dati";
+    include("head.php");
+    ?>
+<body>
+    <div class="row">		
+        <div class="col-md-4 col-sm-2 col-xs-1"></div>
+        <div class="col-md-4 col-sm-8 col-xs-10">
+            
+            <form class="form-horizontal" method="post" action="Registrazione.php">
+                
+                <h1 class="form-group">
+                    <label for="moreSpace" class="col-sm-9 control-label "> <br>Modifica Dati</label>
+                    <div class="col-sm-3">
+                        <img src="cinguettio logo-04.png" class="img-responsive"  alt="Responsive image" align="center">
+                    </div>
+                </h1>
+                <div class="form-group">
+                    <label for="inputNome3" class="col-sm-2 control-label">Nome</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="nome" class="form-control" id="inputNome3">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="inputCognome3" class="col-sm-2 control-label">Cognome</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="cognome" class="form-control" id="inputCognome3">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="inputNickname3" class="col-sm-2 control-label">Nickname</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="nickname" class="form-control" id="inputNickname3">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
+                    <div class="col-sm-10">
+                        <input type="password" name="pwd" class="form-control" id="inputPassword3" placeholder="Password">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="inputPassword3" class="col-sm-2 control-label">Conferma Password</label>
+                    <div class="col-sm-10">
+                        <input type="password" name="confpwd" class="form-control" id="inputPassword3">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="inputHobby3" class="col-sm-2 control-label">Hobby</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="hobby" class="form-control" id="inputHobby3">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="inputSesso3" class="col-sm-2 control-label">Sesso</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="sesso" class="form-control" id="inputSesso3">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="inputStatoN3" class="col-sm-2 control-label">Stato di Nascita</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="statoN" class="form-control" id="inputStatoN3">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="inputRegioneN3" class="col-sm-2 control-label">Regione di Nascita</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="regioneN" class="form-control" id="inputRegioneN3">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="inputCittaN3" class="col-sm-2 control-label">Citta' di Nascita</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="cittaN" class="form-control" id="inputCittaN3">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="inputNomeC3" class="col-sm-2 control-label">Citta' di Residenza</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="nomeC" class="form-control" id="inputNomeC3">
+                    </div>
+                </div>
+                                
+                <div class="form-group text-center">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" class="btn btn-primary">Cambia Dati</button>
+                        <button type = "reset" class="btn btn-primary" name="reset">Premi per svuotare tutti i campi</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-4 col-sm-2 col-xs-1"></div>
+    </div>
+    
+    
+    
+    
+    
+    <?php /*<form method="post" action="Registrazione.php">
+        Compila i seguenti campi per accedere a Cinguettio
+        <table>
+            <tr>
+                <td>Nickname:</td><td> <input type = "text" name = "nick" required/></td>
+            </tr>
+            <tr>
+                <td>Password:</td><td> <input type = "password" name = "pwd" required/></td>
+            </tr>
+            <tr>
+                <td>Conferma Password: </td><td> <input type = "password" name = "confpwd" required/></td> 
+            </tr>
+            <tr>
+                <td>E-mail:</td><td> <input type = "email" placeholder="name@email.com" required name = "mail"/></td>
+            </tr>
+        </table>
+
+        <button class="button button" input type= "submit" name="ok">Questi sono i miei dati</a></button>
+        <button class="button button" input type = "reset" name="reset">Premi per svuotare tutti i campi</button></li> 
+        </form>     */
+    ?>
+
+<p><?php echo $errore ?></p>
+</body>

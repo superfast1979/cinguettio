@@ -43,7 +43,7 @@ a:visited{
 a:hover{
 	text-decoration:none;
 	color: #ccccff;
-	text-shadow: black 4px 4px 4px;
+	text-shadow: black 2px 2px 6px;
 }
 a:active{
 	text-decoration:none;
