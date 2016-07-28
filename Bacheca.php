@@ -59,7 +59,8 @@ $_SESSION['title'] = "Bacheca";
 include("head.php");
 ?>
 <body>
-    <ul>
+    <?php /*
+     * <ul>
         <li><a class="active" href="Bacheca.php" class='active'>Bacheca</a></li>
         <li><a href="Datiutente.php">Dati Utente</a></li>
         <li><a href="Chiseguo.php">Chi Seguo</a></li>
@@ -72,7 +73,25 @@ include("head.php");
         <textarea name="cintesto" rows="2" cols="100" placeholder="Cinguettio" autofocus></textarea>
         <input type="submit" value="Invia">
     </form>
-
+     */
+    ?>
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand"><img src="cinguettio logo-04.png" class="img-responsive"  alt="Responsive image" padding-top= "-10px" width="30px" height="30px"></a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="Bacheca.php" class='active'>Bacheca</a></li>
+                <li><a href="Datiutente.php">Dati Utente</a></a></li>
+                <li><a href="Chiseguo.php">Chi Seguo</a></li> 
+                <li><a href="Chimisegue.html">Chi Mi Segue</a></li> 
+                <li><a href="Logout.php">Logout</a></li> 
+            </ul>
+        </div>
+    </nav>
+        
+        
+       
     <?php
     for ($i = 0; $i < count($cinguettii); $i++) {
         ?>
@@ -81,12 +100,18 @@ include("head.php");
             <div class="col-md-8">
                 <?php
                 $panel = "panel panel-primary";
-                if ($i % 2) {
-                    $panel = "panel panel-success";
+                if ($cinguettii[$i]['tipo']=='f') {
+                    $panel = "panel panel-foto";
+                }
+                if ($cinguettii[$i]['tipo']=='t') {
+                    $panel = "panel panel-testo";
+                }
+                if ($cinguettii[$i]['tipo']=='l') {
+                    $panel = "panel panel-luogo";
                 }
                 ?>               
                 <div class="<?php echo $panel; ?>">
-                    <div class="panel-heading"><?php echo $cinguettii[$i]['email']; ?></div>
+                    <div class="panel-heading"><?php echo $cinguettii[$i]['email']?>&nbsp;<?php echo $cinguettii[$i]['dataOraCreazione']; ?></div>
                     <div class="panel-body">
                         <?php echo $cinguettii[$i]['stringaDaStampare']; ?>
                     </div>
