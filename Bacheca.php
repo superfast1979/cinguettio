@@ -82,7 +82,7 @@ include("head.php");
             </div>
             <ul class="nav navbar-nav">
                 <li class="active"><a href="Bacheca.php" class='active'>Bacheca</a></li>
-                <li><a href="Datiutente.php">Dati Utente</a></a></li>
+                <li><a href="Datiutente.php?email=<?php echo $email?>">Dati Utente</a></a></li>
                 <li><a href="Chiseguo.php">Chi Seguo</a></li> 
                 <li><a href="Chimisegue.html">Chi Mi Segue</a></li> 
                 <li><a href="Logout.php">Logout</a></li> 
@@ -111,7 +111,7 @@ include("head.php");
                 }
                 ?>               
                 <div class="<?php echo $panel; ?>">
-                    <div class="panel-heading"><?php echo $cinguettii[$i]['email']?>&nbsp;<?php echo $cinguettii[$i]['dataOraCreazione']; ?></div>
+                    <div class="panel-heading"><a href="Datiutente.php?email=<?php echo $cinguettii[$i]['email']?>"><?php echo $cinguettii[$i]['email']?></a>&nbsp;<?php echo $cinguettii[$i]['dataOraCreazione']; ?></div>
                     <div class="panel-body">
                         <?php echo $cinguettii[$i]['stringaDaStampare']; ?>
                     </div>

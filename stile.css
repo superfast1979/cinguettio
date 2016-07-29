@@ -109,7 +109,7 @@ a:active{
 }
 
 .navbar-default{
-    color: black;
+    color: #000033;
     font-weight: bold;
     text-shadow:none;
     background-color: #337ab7;
@@ -119,10 +119,19 @@ a:active{
     color:black;
 }
 
+.navbar-default .navbar-nav>li>a {
+    color: black;
+}
+
 .navbar-default:active{
     color: black;
     text-shadow:none;
     background-color: #0052cc;
     border-color: #0052cc;
+}
+
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover {
+    color: black;
+    background-color: #e7e7e7;
 }
 
