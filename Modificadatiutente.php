@@ -30,7 +30,7 @@ if (isset($_POST['cambia'])) {
     $cittaN = addslashes($_POST['cittaN']);
     $nomeC = addslashes($_POST['nomeC']);
     $CAP= addslashes($_POST['CAP']);
-    $prefissoTel= addcslashes($_POST['prefissoTel'])
+    $prefissoTel= addcslashes($_POST['prefissoTel']);
 
 
     if ($password == $confpassword) {
