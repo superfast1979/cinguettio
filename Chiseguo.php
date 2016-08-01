@@ -35,13 +35,10 @@ if (isset($_POST['cerca'])) {
         $whereClause .= " AND hobby='$hobby'";
     }
 
-//    if (isset($_POST['eta'])) {
-//        $eta = addslashes($_POST['eta']);
-//        if ($whereClause != "") {
-//            $whereClause .= " AND "
-//        }
-//        $whereClause .= "hobby='$hobby'"
-//    } 
+    if (isValidInput($_POST['eta'])) {
+        $eta = addslashes($_POST['eta']);
+        $whereClause .= "AND YEAR(dataNascita) = (YEAR(CURDATE()) - '$eta')";
+    } 
 
     if (isset($_POST['sesso'])) {
         $sesso = addslashes($_POST['sesso']);
