@@ -13,36 +13,50 @@ $panel = "panel panel-default";
 $_SESSION['title'] = "Chi Seguo";
 include("head.php");
 
+function isValidInput($str) {
+    return (isset($str) && $str != "");
+}
+
 if (isset($_POST['cerca'])) {
-    if (isset($_POST['nome'])) {
+
+    $nomeSql = "SELECT email FROM utente WHERE ";
+    $nomeSql .= "email NOT IN ";
+    $nomeSql .= "(SELECT u.email FROM segue s, utente u WHERE (s.utenteCheSegue = '$email' AND s.utenteSeguito = u.email) OR";
+    $nomeSql .= "(s.utenteCheSegue = '$email' AND s.utenteCheSegue = u.email))";
+    $whereClause = "";
+
+    if (isValidInput($_POST['nome'])) {
         $nome = addslashes($_POST['nome']);
-    } else {
-        $nome = '';
+        $whereClause = " AND nome='$nome'";
     }
-    if (isset($_POST['hobby'])) {
+
+    if (isValidInput($_POST['hobby'])) {
         $hobby = addslashes($_POST['hobby']);
-    } else {
-        $hobby = '';
+        $whereClause .= " AND hobby='$hobby'";
     }
-    if (isset($_POST['eta'])) {
-        $eta = addslashes($_POST['eta']);
-    } else {
-        $eta = '';
-    }
+
+//    if (isset($_POST['eta'])) {
+//        $eta = addslashes($_POST['eta']);
+//        if ($whereClause != "") {
+//            $whereClause .= " AND "
+//        }
+//        $whereClause .= "hobby='$hobby'"
+//    } 
+
     if (isset($_POST['sesso'])) {
         $sesso = addslashes($_POST['sesso']);
-    } else {
-        $sesso = '';
+        $whereClause .= " AND sesso='$sesso'";
     }
-    if (isset($_POST['nomeC'])) {
+
+    if (isValidInput($_POST['nomeC'])) {
         $nomeC = addslashes($_POST['nomeC']);
-    } else {
-        $nomeC = '';
+        $whereClause .= " AND nomeC='$nomeC'";
     }
 
-
-    $sqlCerca = "SELECT nome, cognome, dataNascita, sesso, email, hobby FROM utente WHERE "
-            . "nome='$nome' OR hobby='$hobby' OR cast(dataNascita AS DATE)='(CURRENT_DATE - cast($eta as DATE)' OR sesso='$sesso' OR nomeC='$nomeC'";
+    $sqlCerca = $nomeSql . $whereClause;
+    printf("%s", $sqlCerca);
+//    $sqlCerca = "SELECT nome, cognome, dataNascita, sesso, email, hobby FROM utente WHERE "
+//            . "nome='$nome' OR hobby='$hobby' OR cast(dataNascita AS DATE)='(CURRENT_DATE - cast($eta as DATE)' OR sesso='$sesso' OR nomeC='$nomeC'";
 
     $seguibili = array();
     if ($resultCerca = db_query($sqlCerca)) {
@@ -80,7 +94,7 @@ if (isset($_GET['elimina'])) {
 
     $utenteEliminato = $_GET['utente'];
     $utenteCheElimina = $_SESSION['email'];
-    
+
     $sqlRimuovi = "DELETE FROM segue WHERE utenteCheSegue='$utenteCheElimina' 
         AND utenteSeguito='$utenteEliminato'";
 
@@ -128,20 +142,20 @@ if ($result = db_query($sql)) {
     <div class = "row">
         <div class="col-md-1"></div>
         <div class="col-md-3">
-<?php
-for ($i = 0; $i < count($seguiti); $i++) {
-    ?>
+            <?php
+            for ($i = 0; $i < count($seguiti); $i++) {
+                ?>
                 <div class="<?php echo $panel; ?>">
                     <div class="panel-chiseguo">
-                <?php echo $seguiti[$i]['utenteSeguito'] ?>
+                        <?php echo $seguiti[$i]['utenteSeguito'] ?>
                         <a href="Chiseguo.php?elimina=true&utente=<?php echo $seguiti[$i]['utenteSeguito']; ?>">
                             &nbsp; <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                         </a>
                     </div>
                 </div>
-    <?php
-}
-?>
+                <?php
+            }
+            ?>
         </div>
         <div class="col-md-1"></div>
         <div class = "col-md-6">
@@ -188,22 +202,22 @@ for ($i = 0; $i < count($seguiti); $i++) {
                     </form>
                 </div>
                 <br>
-<?php
-if (isset($_POST['cerca'])) {
-    for ($i = 0; $i < count($seguibili); $i++) {
-        ?>
+                <?php
+                if (isset($_POST['cerca'])) {
+                    for ($i = 0; $i < count($seguibili); $i++) {
+                        ?>
                         <div class="<?php echo $panel; ?>">
                             <div class="panel-chiseguo">
-                        <?php echo $seguibili[$i]['email'] ?>
+                                <?php echo $seguibili[$i]['email'] ?>
                                 <a href="Chiseguo.php?aggiungi=true&utente=<?php echo $seguibili[$i]['email']; ?>">
                                     &nbsp; <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                                 </a>
                             </div>
                         </div>
-        <?php
-    }
-}
-?>                
+                        <?php
+                    }
+                }
+                ?>                
             </div>
         </div>
         <div class="col-md-1"></div>
