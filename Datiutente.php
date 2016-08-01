@@ -30,7 +30,10 @@ include("head.php");
     $br = "<br>";
 
     $sql = "SELECT * FROM utente WHERE email='$email'";
-
+    ?>
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+    <?php
     if ($result = db_query($sql)) {
         echo "<center><table class=\"table\" <th><h2>Dati Utente</h2></th>";
         // output data of each row
@@ -54,5 +57,7 @@ include("head.php");
     if($_SESSION['email']==$_GET['email']){
         ?><a href="Modificadatiutente.php">Modifica i tuoi dati</a><?php
     }else{};?>
+    </div>
+    <div class="col-md-4"></div>
 </body>
 
