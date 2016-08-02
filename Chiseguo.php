@@ -51,7 +51,7 @@ if (isset($_POST['cerca'])) {
     }
 
     $sqlCerca = $nomeSql . $whereClause;
-    printf("%s", $sqlCerca);
+    
 //    $sqlCerca = "SELECT nome, cognome, dataNascita, sesso, email, hobby FROM utente WHERE "
 //            . "nome='$nome' OR hobby='$hobby' OR cast(dataNascita AS DATE)='(CURRENT_DATE - cast($eta as DATE)' OR sesso='$sesso' OR nomeC='$nomeC'";
 

@@ -29,16 +29,19 @@ if (isset($_POST['cambia'])) {
     $regioneN = addslashes($_POST['regioneN']);
     $cittaN = addslashes($_POST['cittaN']);
     $nomeC = addslashes($_POST['nomeC']);
-    $CAP= addslashes($_POST['CAP']);
-    $prefissoTel= addcslashes($_POST['prefissoTel']);
 
+    $sqlCitta = "INSERT INTO citta (nomeC)"
+                . " VALUES('$nomeC')";
+    
+    $resCitta= db_query($sqlCitta);
+    printf("%s", $sqlCitta);
 
-    if ($password == $confpassword) {
-
+    if ($password == $confpassword) {   
+        
         $sql = "UPDATE `utente` SET nome='$nome', cognome='$cognome', nickname='$nickname',"
                 . "psw='$password',hobby='$hobby',"
                 . "dataNascita='$dataNascita', sesso='$sesso', statoN='$statoN',"
-                . "regioneN='$regioneN', cittaN='$cittaN'"
+                . "regioneN='$regioneN', cittaN='$cittaN', nomeC='$nomeC'"
                 . "WHERE email='$email'";
 
         if ($result = db_query($sql)) {
@@ -54,8 +57,7 @@ if (isset($_POST['cambia'])) {
         }
     }
 } else {
-    $sql = "SELECT * FROM utente WHERE email='$email'";
-
+    $sql = "SELECT * FROM utente NATURAL JOIN citta WHERE email='$email'";
     if ($result = db_query($sql)) {
         $row = mysqli_fetch_assoc($result);
     }
@@ -94,89 +96,90 @@ if (isset($_POST['cambia'])) {
                     </div>
                 </h1>
                 <div class="form-group">
-                    <label for="inputNome3" class="col-sm-2 control-label">Nome</label>
-                    <div class="col-sm-10">
+                    <label for="inputNome3" class="col-sm-4 control-label">Nome</label>
+                    <div class="col-sm-8">
                         <input type="text" name="nome" value="<?php echo $row['nome'];?>" class="form-control" id="inputNome3">
                     </div>
                 </div>
                 
                 <div class="form-group">
-                    <label for="inputCognome3" class="col-sm-2 control-label">Cognome</label>
-                    <div class="col-sm-10">
+                    <label for="inputCognome3" class="col-sm-4 control-label">Cognome</label>
+                    <div class="col-sm-8">
                         <input type="text" name="cognome" value="<?php echo $row['cognome']?>" class="form-control" id="inputCognome3">
                     </div>
                 </div>
                 
                 <div class="form-group">
-                    <label for="inputNickname3" class="col-sm-2 control-label">Nickname</label>
-                    <div class="col-sm-10">
+                    <label for="inputNickname3" class="col-sm-4 control-label">Nickname</label>
+                    <div class="col-sm-8">
                         <input type="text" name="nickname" value="<?php echo $row['nickname']?>" class="form-control" id="inputNickname3">
                     </div>
                 </div>
                 
                 <div class="form-group">
-                    <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
-                    <div class="col-sm-10">
+                    <label for="inputPassword3" class="col-sm-4 control-label">Password</label>
+                    <div class="col-sm-8">
                         <input type="password" name="pwd" value="<?php echo $row['psw']?>" class="form-control" id="inputPassword3" placeholder="Password">
                     </div>
                 </div>
                 
                 <div class="form-group">
-                    <label for="inputPassword3" class="col-sm-2 control-label">Conferma Password</label>
-                    <div class="col-sm-10">
-                        <input type="password" name="confpwd" class="form-control" id="inputPassword3">
+                    <label for="inputPassword3" class="col-sm-4 control-label">Ripeti Password</label>
+                    <div class="col-sm-8">
+                        <input type="password" name="confpwd" value="<?php echo $row['psw']?>" class="form-control" id="inputPassword3">
                     </div>
                 </div>
                 
                 <div class="form-group">
-                    <label for="inputHobby3" class="col-sm-2 control-label">Hobby</label>
-                    <div class="col-sm-10">
+                    <label for="inputHobby3" class="col-sm-4 control-label">Hobby</label>
+                    <div class="col-sm-8">
                         <input type="text" name="hobby" value="<?php echo $row['hobby']?>" class="form-control" id="inputHobby3">
                     </div>
                 </div>
                 
                 <div class="form-group">
-                    <label for="inputSesso3" class="col-sm-2 control-label">Sesso</label>
-                    <div class="col-sm-10">
-                        <input type="text" name="sesso" value="<?php echo $row['sesso']?>" class="form-control" id="inputSesso3">
+                    <label for="inputSesso3" class="col-sm-4 control-label">Sesso</label>
+                    <div class="col-sm-8">
+                        <input type="radio" name="sesso" id="optionsRadios1" value="M"> M
+                        <input type="radio" name="sesso" id="optionsRadios2" value="F"> F
                     </div>
                 </div>
                 
                 <div class="form-group">
-                    <label for="inputDataNascita3" class="col-sm-2 control-label">Data di Nascita</label>
-                    <div class="col-sm-10">
+                    <label for="inputDataNascita3" class="col-sm-4 control-label">Data di Nascita</label>
+                    <div class="col-sm-8">
                         <input type="text" name="dataNascita" value="<?php echo $row['dataNascita']?>" class="form-control" id="dataNascita3">
                     </div>
                 </div>
                 
                 <div class="form-group">
-                    <label for="inputStatoN3" class="col-sm-2 control-label">Stato di Nascita</label>
-                    <div class="col-sm-10">
+                    <label for="inputStatoN3" class="col-sm-4 control-label">Stato di Nascita</label>
+                    <div class="col-sm-8">
                         <input type="text" name="statoN" value="<?php echo $row['statoN']?>" class="form-control" id="inputStatoN3">
                     </div>
                 </div>
                 
                 <div class="form-group">
-                    <label for="inputRegioneN3" class="col-sm-2 control-label">Regione di Nascita</label>
-                    <div class="col-sm-10">
+                    <label for="inputRegioneN3" class="col-sm-4 control-label">Regione di Nascita</label>
+                    <div class="col-sm-8">
                         <input type="text" name="regioneN" value="<?php echo $row['regioneN']?>" class="form-control" id="inputRegioneN3">
                     </div>
                 </div>
                 
                 <div class="form-group">
-                    <label for="inputCittaN3" class="col-sm-2 control-label">Citta' di Nascita</label>
-                    <div class="col-sm-10">
+                    <label for="inputCittaN3" class="col-sm-4 control-label">Citta' di Nascita</label>
+                    <div class="col-sm-8">
                         <input type="text" name="cittaN" value="<?php echo $row['cittaN']?>" class="form-control" id="inputCittaN3">
                     </div>
                 </div>
                 
                 <div class="form-group">
-                    <label for="inputNomeC3" class="col-sm-2 control-label">Citta' di Residenza</label>
-                    <div class="col-sm-10">
+                    <label for="inputNomeC3" class="col-sm-4 control-label">Citta' di Residenza</label>
+                    <div class="col-sm-8">
                         <input type="text" name="nomeC" value="<?php echo $row['nomeC']?>" class="form-control" id="inputNomeC3">
                     </div>
                 </div>
-                                
+                            
                 <div class="form-group text-center">
                     <div class="col-sm-offset-2 col-sm-10">
                         <button type="submit" name="cambia" class="btn btn-primary">Cambia Dati</button>
