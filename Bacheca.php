@@ -9,17 +9,17 @@ if (!isset($_SESSION['email']) || !isset($_SESSION['pwd'])) {
 $email = $_SESSION['email'];
 $br = "<br>";
 $sql = "SELECT * FROM
- (SELECT DISTINCT u.email, c.dataOraCreazione, l.nomeL AS stringaDaStampare, c.tipo
+ (SELECT DISTINCT u.email, c.dataOraCreazione, l.nomeL AS stringaDaStampare, c.tipo, c.id
  FROM segue s, utente u, luogo l, cinguettio c 
  WHERE (s.utenteCheSegue='$email' AND s.utenteSeguito=u.email AND c.email=u.email AND  c.id=l.id) 
   OR (s.utenteCheSegue='$email' AND s.utenteCheSegue=u.email AND c.email=u.email AND c.id=l.id)
  UNION
- SELECT DISTINCT u.email, c.dataOraCreazione, t.testo AS stringaDaStampare, c.tipo
+ SELECT DISTINCT u.email, c.dataOraCreazione, t.testo AS stringaDaStampare, c.tipo, c.id
  FROM segue s, utente u, testo t, cinguettio c
  WHERE (s.utenteCheSegue='$email' AND s.utenteSeguito=u.email AND c.email=u.email AND c.id=t.id) 
   OR (s.utenteCheSegue='$email' AND s.utenteCheSegue=u.email AND c.email=u.email AND c.id=t.id)
     UNION
-    SELECT DISTINCT u.email, c.dataOraCreazione, CONCAT(f.path,' ',f.nomeF,' ',f.descrizione) AS stringaDaStampare, c.tipo
+    SELECT DISTINCT u.email, c.dataOraCreazione, CONCAT(f.path,' ',f.nomeF,' ',f.descrizione) AS stringaDaStampare, c.tipo, c.id
  FROM segue s, utente u, foto f, cinguettio c 
  WHERE (s.utenteCheSegue='$email' AND s.utenteSeguito=u.email AND c.email=u.email AND c.id=f.id) 
   OR (s.utenteCheSegue='$email' AND s.utenteCheSegue=u.email AND c.email=u.email AND c.id=f.id)) AS t
@@ -28,58 +28,29 @@ $sql = "SELECT * FROM
 
 $cinguettii = array();
 if ($result = db_query($sql)) {
-//    printf("$br Select returned %d rows.\n", mysqli_num_rows($result));
     while ($row = mysqli_fetch_assoc($result)) {
         array_push($cinguettii, $row);
-//        printf("$br %s %s %s", $row['email'], $row['dataOraCreazione'], $row['stringaDaStampare']);
     }
     mysqli_free_result($result);
 } else {
     printf(db_error());
 }
 
+$error = "";
 
-if(($_GET['segnala'])==true){
-    $idSeg=$_GET['id'];
-    $utenteSeg=$_GET['email'];
-    $sqlSegnala= "INSERT INTO segnalainappropriato (id, email) VALUES ('$idSeg','$email')";
-    $resultSeg=db_query($sqlSegnala);
+if (isset($_GET['segnala']) && ($_GET['segnala'] == true)) {
+    $idSeg = $_GET['id'];
+    $sqlSegnala = "INSERT INTO segnalainappropriato (id, email) VALUES ('$idSeg','$email')";
+    $resultSeg = db_query($sqlSegnala);
+    $error = db_error();
 }
-// TODO
-// STEP 1
-// recuperare l'utente loggato da $_SESSION['email'] OK
-// fare query per recuperare la lista dei cinguettii dell'utente
-// fare query per recuperare la lista dei cinguettii degli utenti seguiti
-// ordinarli per data
-// fare un loop per stampare l'id e il tipo di cinguettio
-// $results = db_query("SELECT ---- ");
-// STEP 2
-// per ogni id di cinguettio e tipo preleviamo le info dalla tabella relativa
-// e stampiamo il contenuto
 ?>
-
 
 <?php
 $_SESSION['title'] = "Bacheca";
 include("head.php");
 ?>
 <body>
-    <?php /*
-     * <ul>
-      <li><a class="active" href="Bacheca.php" class='active'>Bacheca</a></li>
-      <li><a href="Datiutente.php">Dati Utente</a></li>
-      <li><a href="Chiseguo.php">Chi Seguo</a></li>
-      <li><a href="Chimisegue.html">Chi Mi Segue</a></li>
-      <li><a href="Logout.php">Logout</a></li>
-      </ul>
-      <br>
-      <br>
-      <form method="post" action="Bacheca.php">
-      <textarea name="cintesto" rows="2" cols="100" placeholder="Cinguettio" autofocus></textarea>
-      <input type="submit" value="Invia">
-      </form>
-     */
-    ?>
     <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -94,8 +65,6 @@ include("head.php");
             </ul>
         </div>
     </nav>
-
-
 
     <?php
     for ($i = 0; $i < count($cinguettii); $i++) {
@@ -124,9 +93,8 @@ include("head.php");
                         <?php echo $cinguettii[$i]['stringaDaStampare']; ?>
                         <?php if ($tipo == 'Testo') { ?>
                             <div class="btn-group pull-right">
-                                <button href="Bacheca.php?segnala=true&id=<?php echo $cinguettii[$i]['id']; ?>&utente=<?php echo $cinguettii[$i]['email']; ?>"
-                                        type="button" class="btn btn-danger">Inappropriato &nbsp; 
-                                    <span class="glyphicon glyphicon-thumbs-down " aria-hidden="true"></span></button>
+                                <a href="Bacheca.php?segnala=true&id=<?php echo $cinguettii[$i]['id']; ?>"<button type="button" class="btn btn-danger">Inappropriato &nbsp; 
+                                        <span class="glyphicon glyphicon-thumbs-down " aria-hidden="true"></span></button></a>
                                 <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <span class="caret"></span>
                                     <span class="sr-only">Toggle Dropdown</span>
@@ -180,6 +148,6 @@ include("head.php");
         <?php
     }
     ?>
-
-</body>
+    <p><?php echo $error; ?></p>
+ </body>
 
