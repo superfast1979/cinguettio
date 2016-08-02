@@ -38,7 +38,7 @@ if (isset($_POST['cerca'])) {
     if (isValidInput($_POST['eta'])) {
         $eta = addslashes($_POST['eta']);
         $whereClause .= "AND YEAR(dataNascita) = (YEAR(CURDATE()) - '$eta')";
-    } 
+    }
 
     if (isset($_POST['sesso'])) {
         $sesso = addslashes($_POST['sesso']);
@@ -51,7 +51,7 @@ if (isset($_POST['cerca'])) {
     }
 
     $sqlCerca = $nomeSql . $whereClause;
-    
+
 //    $sqlCerca = "SELECT nome, cognome, dataNascita, sesso, email, hobby FROM utente WHERE "
 //            . "nome='$nome' OR hobby='$hobby' OR cast(dataNascita AS DATE)='(CURRENT_DATE - cast($eta as DATE)' OR sesso='$sesso' OR nomeC='$nomeC'";
 
@@ -77,8 +77,7 @@ if (isset($_GET['aggiungi'])) {
     $sqlAggiungi = "INSERT INTO segue (utenteSeguito, utenteCheSegue) "
             . "VALUES('$utenteAggiunto','$utenteCheAggiunge')";
     if ($result = db_query($sqlAggiungi)) {
-        header("location: ChiSeguo.php");
-        echo "Amico Aggiunto!";
+        header("location: ChiSeguo.php?amico=aggiunto");
     } else {
         $errore = db_error();
     }
@@ -96,8 +95,7 @@ if (isset($_GET['elimina'])) {
         AND utenteSeguito='$utenteEliminato'";
 
     if ($result = db_query($sqlRimuovi)) {
-        header("location: ChiSeguo.php");
-        echo "Amico Rimosso!";
+        header("location: ChiSeguo.php?amico=rimosso");
     } else {
         $errore = db_error();
     }
@@ -219,5 +217,15 @@ if ($result = db_query($sql)) {
         </div>
         <div class="col-md-1"></div>
     </div>
+    <p><?php
+        if (isset($_GET['amico'])) {
+            if ($_GET['amico'] == "aggiunto") {
+                echo "Amico aggiunto";
+            } else {
+                echo "Amico rimosso";
+            }
+        }
+        ?>
+    </p>
 
 </body>
