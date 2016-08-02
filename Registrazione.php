@@ -4,12 +4,11 @@ require_once("database.php");
 require_once("utility.php");
 
 $errore = "";
-
 $prova = "";
 
 if (isset($_POST['ok'])) {
-    $email = addslashes($_POST['mail']);
-    $user = addslashes($_POST['nick']);
+    $email = addslashes($_POST['email']);
+    $user = addslashes($_POST['nickname']);
     $password = addslashes($_POST['pwd']);
     $confpassword = addslashes($_POST['confpwd']);
 
@@ -78,7 +77,7 @@ if (isset($_POST['ok'])) {
                 
                 <div class="form-group text-center">
                     <div class="col-sm-offset-2 col-sm-10">
-                        <button type="submit" class="btn btn-primary">Iscriviti</button>
+                        <button type="submit" class="btn btn-primary" name="ok">Iscriviti</button>
                         <button type = "reset" class="btn btn-primary" name="reset">Premi per svuotare tutti i campi</button>
                     </div>
                 </div>
@@ -86,32 +85,6 @@ if (isset($_POST['ok'])) {
         </div>
         <div class="col-md-4 col-sm-2 col-xs-1"></div>
     </div>
-    
-    
-    
-    
-    
-    <?php /*<form method="post" action="Registrazione.php">
-        Compila i seguenti campi per accedere a Cinguettio
-        <table>
-            <tr>
-                <td>Nickname:</td><td> <input type = "text" name = "nick" required/></td>
-            </tr>
-            <tr>
-                <td>Password:</td><td> <input type = "password" name = "pwd" required/></td>
-            </tr>
-            <tr>
-                <td>Conferma Password: </td><td> <input type = "password" name = "confpwd" required/></td> 
-            </tr>
-            <tr>
-                <td>E-mail:</td><td> <input type = "email" placeholder="name@email.com" required name = "mail"/></td>
-            </tr>
-        </table>
-
-        <button class="button button" input type= "submit" name="ok">Questi sono i miei dati</a></button>
-        <button class="button button" input type = "reset" name="reset">Premi per svuotare tutti i campi</button></li> 
-        </form>     */
-    ?>
-
+ 
 <p><?php echo $errore ?></p>
 </body>
