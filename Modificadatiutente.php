@@ -77,7 +77,7 @@ if (isset($_POST['cambia'])) {
                 <li><a href="Bacheca.php">Bacheca</a></li>
                 <li class="active"><a href="Datiutente.php?email=<?php echo $email?>">Dati Utente</a></li>
                 <li><a href="Chiseguo.php">Chi Seguo</a></li> 
-                <li><a href="Chimisegue.html">Chi Mi Segue</a></li> 
+                <li><a href="Chimisegue.php">Chi Mi Segue</a></li> 
                 <li><a href="Logout.php">Logout</a></li> 
             </ul>
         </div>
@@ -140,8 +140,8 @@ if (isset($_POST['cambia'])) {
                 <div class="form-group">
                     <label for="inputSesso3" class="col-sm-4 control-label">Sesso</label>
                     <div class="col-sm-8">
-                        <input type="radio" name="sesso" id="optionsRadios1" value="M"> M
-                        <input type="radio" name="sesso" id="optionsRadios2" value="F"> F
+                        <input type="radio" name="sesso" id="optionsRadios1" value="M" <?php if ($row['sesso']=='M')echo "checked='checked'";?>> M
+                        <input type="radio" name="sesso" id="optionsRadios2" value="F" <?php if ($row['sesso']=='F')echo "checked='checked'";?>> F
                     </div>
                 </div>
                 

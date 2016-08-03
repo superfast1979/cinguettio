@@ -19,7 +19,7 @@ include("head.php");
                 <li><a href="Bacheca.php">Bacheca</a></li>
                 <li class="active"><a href="Datiutente.php?email=<?php echo $_SESSION['email'] ?>">Dati Utente</a></li>
                 <li><a href="Chiseguo.php">Chi Seguo</a></li> 
-                <li><a href="Chimisegue.html">Chi Mi Segue</a></li> 
+                <li><a href="Chimisegue.php">Chi Mi Segue</a></li> 
                 <li><a href="Logout.php">Logout</a></li> 
             </ul>
         </div>

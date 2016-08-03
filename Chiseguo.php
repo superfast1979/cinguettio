@@ -128,7 +128,7 @@ if ($result = db_query($sql)) {
                 <li><a href="Bacheca.php">Bacheca</a></li>
                 <li><a href="Datiutente.php?email=<?php echo $email ?>">Dati Utente</a></a></li>
                 <li class="active"><a href="Chiseguo.php">Chi Seguo</a></li> 
-                <li><a href="Chimisegue.html">Chi Mi Segue</a></li> 
+                <li><a href="Chimisegue.php">Chi Mi Segue</a></li> 
                 <li><a href="Logout.php">Logout</a></li> 
             </ul>
         </div>
@@ -217,7 +217,7 @@ if ($result = db_query($sql)) {
         </div>
         <div class="col-md-1"></div>
     </div>
-    <p><?php
+    <p align="center"><?php
         if (isset($_GET['amico'])) {
             if ($_GET['amico'] == "aggiunto") {
                 echo "Amico aggiunto";

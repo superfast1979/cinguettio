@@ -4,7 +4,8 @@ require_once("database.php");
 require_once("utility.php");
 
 $errore = "";
-$prova = "";
+$errore1 = "";
+$br="<br>";
 
 if (isset($_POST['ok'])) {
     $email = addslashes($_POST['email']);
@@ -23,9 +24,10 @@ if (isset($_POST['ok'])) {
         }
     } else {
         if ($password != $confpassword) {
-            $errore = "La password è diversa";
-        } else {
-            $errore = "Email già utilizzata";
+            $errore = "&nbsp;&nbsp;  La password è diversa". $br;
+        }
+        if (UserExists($email)==TRUE){
+            $errore1 = "&nbsp;&nbsp;  Email già utilizzata";
         }
     }
 }
@@ -81,10 +83,12 @@ if (isset($_POST['ok'])) {
                         <button type = "reset" class="btn btn-primary" name="reset">Premi per svuotare tutti i campi</button>
                     </div>
                 </div>
+                <br>
+                <a href="Login.php" class="pull-right">Torna al Login</a>
             </form>
         </div>
         <div class="col-md-4 col-sm-2 col-xs-1"></div>
     </div>
- 
-<p><?php echo $errore ?></p>
+    
+<p><?php echo $errore.$errore1 ?></p>
 </body>
