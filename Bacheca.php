@@ -132,15 +132,14 @@ include("head.php");
                     <div class="panel-body">
                         <?php echo $cinguettii[$i]['stringaDaStampare']; ?>
                         <?php if ($tipo == 'Testo') { ?>
-                            <div class="btn-group pull-right">
+                            <div class="post_list btn-group pull-right">
                                 <form name="modulo" method="POST">
                                     <input type="hidden" name="idCinguettio" id="idCinguettio" value="<?php echo $cinguettii[$i]['id']; ?>">
-                                    <input type="hidden" name="contatore" id="contatore" value="<?php echo "#contatore".$i; ?>">
-                                    <button id="bottone" type="button" class="post_list btn btn-danger">Lista &nbsp; 
+                                    <button id="bottone" type="button" class="btn btn-danger">Lista &nbsp; 
                                         <span class="glyphicon glyphicon-thumbs-down " aria-hidden="true"></span>
                                     </button>
                                 </form>
-                                <div id="risultato<?php echo $i; ?>"></div>
+                                <div class="post_div" id="risultato" style="display: none;"></div>
                             </div> 
 
                             <div class="btn-group pull-right">
@@ -196,18 +195,16 @@ include("head.php");
     <script type="text/javascript">
         $(document).ready(function () {
             $(".post_list").click(function () {
-                var idCinguettio = $("#idCinguettio").val();
-                var contatore = $("#contatore").val();
-                alert(idCinguettio);
+                var idCinguettio = $(this).find("input").val();
                 $.ajax({
                     type: "POST",
                     url: "Bacheca_1.php",
                     data: "id=" + idCinguettio + "&inappropriato=true",
                     dataType: "html",
+                    context: this,
                     success: function (msg)
                     {
-                        
-                        $(contatore).html(msg);
+                        $(this).find(".post_div").html(msg).toggle();
                     },
                     error: function ()
                     {

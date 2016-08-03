@@ -10,7 +10,8 @@ $segnalanti = array();
 $contaSegnalanti = array();
 if (isset($_POST['inappropriato']) && ($_POST['inappropriato'] == true)) {
     $html = "<p align='right'>";
-    $sqlListaSeg = "SELECT email FROM segnalainappropriato";
+    $idCinguettio = $_POST['id'];
+    $sqlListaSeg = "SELECT email FROM segnalainappropriato WHERE id='$idCinguettio'";
     if ($resultListaSeg = db_query($sqlListaSeg)) {
         while ($row = mysqli_fetch_assoc($resultListaSeg)) {
             array_push($segnalanti, $row);
@@ -21,7 +22,7 @@ if (isset($_POST['inappropriato']) && ($_POST['inappropriato'] == true)) {
     } else {
         printf(db_error());
     }
-    $sqlNumSeg = "SELECT COUNT(email) AS Segnalanti FROM segnalainappropriato";
+    $sqlNumSeg = "SELECT COUNT(email) AS Segnalanti FROM segnalainappropriato WHERE id='$idCinguettio'";
     if ($resultNumSeg = db_query($sqlNumSeg)) {
         while ($row = $resultNumSeg->fetch_assoc()) {
             array_push($contaSegnalanti, $row);
