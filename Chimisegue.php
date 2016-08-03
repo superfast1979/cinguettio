@@ -42,18 +42,31 @@ include("head.php");
     </nav>
 
 
-    <?php
-    echo "<center><table class=\"table\" <th><h2>Chi mi Segue</h2></th>";
-    for ($i = 0; $i < count($dati); $i++) {
-        echo "<tr><td>Nome: &nbsp; </td><td>" . $dati[$i]['nome'] . "</td>"
-        . "<td>Cognome: &nbsp;</td><td>" . $dati[$i]['cognome'] . "</td> "
-        . "<td>Email: &nbsp;</td><td>" . $dati[$i]['email'] . "</td> "
-        . "<td>Nickname: &nbsp;</td><td>" . $dati[$i]['nickname'] . "</td>"
-        . "<td>Hobby: &nbsp;</td><td>" . $dati[$i]['hobby'] . "</td>"
-        . "<td>Data di Nascita: </td><td>" . $dati[$i]['dataNascita'] . "</td>"
-        . "<td>Sesso: &nbsp;</td><td>" . $dati[$i]['sesso'] . "</td>"
-        . "<td>Citta' di Residenza: </td><td>" . $dati[$i]['nomeC'] . "</td></tr>";
-    }
-    echo "</table>";
-    ?>
+<center><table class="table" <th><h2>Chi mi Segue</h2></th>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Cognome</th>
+                <th>Email</th>
+                <th>Nickname</th>
+                <th>Hobby</th>
+                <th>Data di Nascita</th>
+                <th>Sesso</th>
+                <th>Citta' di Residenza</th>
+            </tr>
+        </thead>
+        <?php
+        for ($i = 0; $i < count($dati); $i++) {
+            echo "<tr><td>" . $dati[$i]['nome'] . "</td>"
+            . "<td>" . $dati[$i]['cognome'] . "</td> "
+            . "<td>" . $dati[$i]['email'] . "</td> "
+            . "<td>" . $dati[$i]['nickname'] . "</td>"
+            . "<td>" . $dati[$i]['hobby'] . "</td>"
+            . "<td>" . $dati[$i]['dataNascita'] . "</td>"
+            . "<td>" . $dati[$i]['sesso'] . "</td>"
+            . "<td>" . $dati[$i]['nomeC'] . "</td></tr>";
+        }
+        ?>
+    </table>
+
 </body>
