@@ -58,22 +58,32 @@ if (isset($_GET['apprezza']) && ($_GET['apprezza'] == true)) {
     $sqlApp = "INSERT INTO apprezza (id, email) VALUES ('$idSeg','$email')";
     $resultApp = db_query($sqlApp);
     $error = db_error();
-    //mancano un bel po' di cose
+//mancano un bel po' di cose
 }
 
-$sqlListaSeg = "SELECT email FROM segnalainappropriato";
 $segnalanti = array();
-if ($resultListaSeg = db_query($sqlListaSeg)) {
-    while ($row = mysqli_fetch_assoc($resultListaSeg)) {
-        array_push($segnalanti, $row);
+$contaSegnalanti = array();
+if (isset($_GET['inappropriato']) && ($_GET['inappropriato'] == true)) {
+    print("inappropriato");
+    $sqlListaSeg = "SELECT email FROM segnalainappropriato";
+    if ($resultListaSeg = db_query($sqlListaSeg)) {
+        while ($row = mysqli_fetch_assoc($resultListaSeg)) {
+            array_push($segnalanti, $row);
+        }
+        mysqli_free_result($resultListaSeg);
+    } else {
+        printf(db_error());
     }
-    mysqli_free_result($resultListaSeg);
-} else {
-    printf(db_error());
+    $sqlNumSeg = "SELECT COUNT(email) AS Segnalanti FROM segnalainappropriato";
+    if ($resultNumSeg = db_query($sqlNumSeg)) {
+        while ($row = $resultNumSeg->fetch_assoc()) {
+            array_push($contaSegnalanti, $row);
+        }
+        mysqli_free_result($resultNumSeg);
+    } else {
+        printf(db_error());
+    }
 }
-$sqlNumSeg="SELECT COUNT(email) AS Segnalanti FROM segnalainappropriato";
-$resultNumSeg = db_query($sqlNumSeg);
-
 ?>
 
 <?php
@@ -123,67 +133,89 @@ include("head.php");
                         <?php echo $cinguettii[$i]['stringaDaStampare']; ?>
                         <?php if ($tipo == 'Testo') { ?>
                             <div class="btn-group pull-right">
-                                <a href="Bacheca.php?segnala=true&id=<?php echo $cinguettii[$i]['id']; ?>"<button type="button" class="btn btn-danger">Inappropriato &nbsp; 
-                                        <span class="glyphicon glyphicon-thumbs-down " aria-hidden="true"></span></button></a>
-                                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <form name="modulo" method="POST">
+                                    <input type="hidden" name="idCinguettio" id="idCinguettio" value="<?php echo $cinguettii[$i]['id']; ?>">
+                                    <input type="hidden" name="contatore" id="contatore" value="<?php echo "#contatore".$i; ?>">
+                                    <button id="bottone" type="button" class="post_list btn btn-danger">Lista &nbsp; 
+                                        <span class="glyphicon glyphicon-thumbs-down " aria-hidden="true"></span>
+                                    </button>
+                                </form>
+                                <div id="risultato<?php echo $i; ?>"></div>
+                            </div> 
+
+                            <div class="btn-group pull-right">
+                                <a href="Bacheca.php?segnala=true&id=<?php echo $cinguettii[$i]['id']; ?>"
+                                   <button type="button" class="btn btn-danger">Inappropriato &nbsp; 
+                                        <span class="glyphicon glyphicon-thumbs-down " aria-hidden="true"></span>
+                                    </button>
+                                </a>
+                            </div>
+                        <?php } ?>
+                        <?php if ($tipo == "Foto") { ?>
+                            <div class="btn-group pull-right">
+                                <a href="Bacheca.php?apprezza=true&id=<?php echo $cinguettii[$i]['id']; ?>"<button type="button" class="btn btn-primary">Apprezza &nbsp; 
+                                        <span class="glyphicon glyphicon-heart-empty " aria-hidden="true"></span></button></a>
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <span class="caret"></span>
                                     <span class="sr-only">Toggle Dropdown</span>
                                 </button>
                                 <ul class="dropdown-menu">
-                                    <?php
-                                    for ($s = 0; $s < count($segnalanti); $s++) {
-                                        ?>
-                                    <li class="text-center">&nbsp;<?php echo $segnalanti[$s]['email']; ?>&nbsp;</li>
-                                        <?php } ?>
-                                        <li role="separator" class="divider"></li>
-                                        <?php 
-                                        while($row = $resultNumSeg->fetch_assoc())
-                                                ?>
-                                            <li><?php echo $row['Segnalanti']; ?></li>
-                                    </ul>
-                                </div> 
-                            <?php } ?>
-                            <?php if ($tipo == "Foto") { ?>
-                                <div class="btn-group pull-right">
-                                    <a href="Bacheca.php?apprezza=true&id=<?php echo $cinguettii[$i]['id']; ?>"<button type="button" class="btn btn-primary">Apprezza &nbsp; 
-                                            <span class="glyphicon glyphicon-heart-empty " aria-hidden="true"></span></button></a>
-                                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <span class="caret"></span>
-                                        <span class="sr-only">Toggle Dropdown</span>
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="#">Action</a></li>
-                                        <li><a href="#">Another action</a></li>
-                                        <li><a href="#">Something else here</a></li>
-                                        <li role="separator" class="divider"></li>
-                                        <li><a href="#">Separated link</a></li>
-                                    </ul>
-                                </div>  
-                            <?php } ?>
-                            <?php if ($tipo == "Luogo") { ?>
-                                <div class="btn-group pull-right">
-                                    <button href="Bacheca.php?preferito=true&utente=<?php echo $cinguettii[$i]['email']; ?>"
-                                            type="button" class="btn btn-success">Preferito &nbsp; 
-                                        <span class="glyphicon glyphicon-pushpin" aria-hidden="true"></span></button>
-                                    <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <span class="caret"></span>
-                                        <span class="sr-only">Toggle Dropdown</span>
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li>A</li>
-                                        <li role="separator" class="divider"></li>
-                                        <li>Separated link</li>
-                                    </ul>
-                                </div> 
-                            <?php } ?>
-                        </div>
+                                    <li><a href="#">Action</a></li>
+                                    <li><a href="#">Another action</a></li>
+                                    <li><a href="#">Something else here</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="#">Separated link</a></li>
+                                </ul>
+                            </div>  
+                        <?php } ?>
+                        <?php if ($tipo == "Luogo") { ?>
+                            <div class="btn-group pull-right">
+                                <button href="Bacheca.php?preferito=true&utente=<?php echo $cinguettii[$i]['email']; ?>"
+                                        type="button" class="btn btn-success">Preferito &nbsp; 
+                                    <span class="glyphicon glyphicon-pushpin" aria-hidden="true"></span></button>
+                                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="caret"></span>
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li>A</li>
+                                    <li role="separator" class="divider"></li>
+                                    <li>Separated link</li>
+                                </ul>
+                            </div> 
+                        <?php } ?>
                     </div>
                 </div>
-                <div class="col-md-2"></div>
             </div>
-            <?php
-        }
-        ?>
-        <p><?php echo $error; ?></p>
+            <div class="col-md-2"></div>
+        </div>
+        <?php
+    }
+    ?>
+    <p><?php echo $error; ?></p>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".post_list").click(function () {
+                var idCinguettio = $("#idCinguettio").val();
+                var contatore = $("#contatore").val();
+                alert(idCinguettio);
+                $.ajax({
+                    type: "POST",
+                    url: "Bacheca_1.php",
+                    data: "id=" + idCinguettio + "&inappropriato=true",
+                    dataType: "html",
+                    success: function (msg)
+                    {
+                        
+                        $(contatore).html(msg);
+                    },
+                    error: function ()
+                    {
+                        alert("Chiamata fallita, si prega di riprovare...");
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 
