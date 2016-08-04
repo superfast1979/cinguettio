@@ -7,87 +7,13 @@ if (!isset($_SESSION['email']) || !isset($_SESSION['pwd'])) {
 }
 
 $email = $_SESSION['email'];
-$br = "<br>";
-$sql = "SELECT * FROM
- (SELECT DISTINCT u.email, c.dataOraCreazione, l.nomeL AS stringaDaStampare, c.tipo, c.id
- FROM segue s, utente u, luogo l, cinguettio c 
- WHERE (s.utenteCheSegue='$email' AND s.utenteSeguito=u.email AND c.email=u.email AND  c.id=l.id) 
-  OR (s.utenteCheSegue='$email' AND s.utenteCheSegue=u.email AND c.email=u.email AND c.id=l.id)
- UNION
- SELECT DISTINCT u.email, c.dataOraCreazione, t.testo AS stringaDaStampare, c.tipo, c.id
- FROM segue s, utente u, testo t, cinguettio c
- WHERE (s.utenteCheSegue='$email' AND s.utenteSeguito=u.email AND c.email=u.email AND c.id=t.id) 
-  OR (s.utenteCheSegue='$email' AND s.utenteCheSegue=u.email AND c.email=u.email AND c.id=t.id)
-    UNION
-    SELECT DISTINCT u.email, c.dataOraCreazione, CONCAT(f.path,' ',f.nomeF,' ',f.descrizione) AS stringaDaStampare, c.tipo, c.id
- FROM segue s, utente u, foto f, cinguettio c 
- WHERE (s.utenteCheSegue='$email' AND s.utenteSeguito=u.email AND c.email=u.email AND c.id=f.id) 
-  OR (s.utenteCheSegue='$email' AND s.utenteCheSegue=u.email AND c.email=u.email AND c.id=f.id)) AS t
- ORDER BY 2 DESC";
-
-$cinguettii = array();
-if ($result = db_query($sql)) {
-    while ($row = mysqli_fetch_assoc($result)) {
-        array_push($cinguettii, $row);
-    }
-    mysqli_free_result($result);
-} else {
-    printf(db_error());
-}
-
-
-
+$commenti = array();
+print($_GET['idCinguettio']);
 $error = "";
-
-if (isset($_GET['segnala']) && ($_GET['segnala'] == true)) {
-    $idSeg = $_GET['id'];
-    $sqlSegnala = "INSERT INTO segnalainappropriato (id, email) VALUES ('$idSeg','$email')";
-    $resultSeg = db_query($sqlSegnala);
-    $error = db_error();
-}
-
-if (isset($_GET['preferito']) && ($_GET['preferito'] == true)) {
-    $idPref = $_GET['id'];
-    $sqlPref = "INSERT INTO preferisce (id, email) VALUES ('$idSeg','$email')";
-    $resultPref = db_query($sqlPref);
-    $error = db_error();
-}
-
-if (isset($_GET['apprezza']) && ($_GET['apprezza'] == true)) {
-    $idApp = $_GET['id'];
-    $sqlApp = "INSERT INTO apprezza (id, email) VALUES ('$idSeg','$email')";
-    $resultApp = db_query($sqlApp);
-    $error = db_error();
-//mancano un bel po' di cose
-}
-
-$segnalanti = array();
-$contaSegnalanti = array();
-if (isset($_GET['inappropriato']) && ($_GET['inappropriato'] == true)) {
-    print("inappropriato");
-    $sqlListaSeg = "SELECT email FROM segnalainappropriato";
-    if ($resultListaSeg = db_query($sqlListaSeg)) {
-        while ($row = mysqli_fetch_assoc($resultListaSeg)) {
-            array_push($segnalanti, $row);
-        }
-        mysqli_free_result($resultListaSeg);
-    } else {
-        printf(db_error());
-    }
-    $sqlNumSeg = "SELECT COUNT(email) AS Segnalanti FROM segnalainappropriato";
-    if ($resultNumSeg = db_query($sqlNumSeg)) {
-        while ($row = $resultNumSeg->fetch_assoc()) {
-            array_push($contaSegnalanti, $row);
-        }
-        mysqli_free_result($resultNumSeg);
-    } else {
-        printf(db_error());
-    }
-}
 ?>
 
 <?php
-$_SESSION['title'] = "Bacheca";
+$_SESSION['title'] = "Commenti";
 include("head.php");
 ?>
 <body>
@@ -107,41 +33,40 @@ include("head.php");
     </nav>
 
     <?php
-    for ($i = 0; $i < count($cinguettii); $i++) {
+    for ($i = 0; $i < count($commenti); $i++) {
         ?>
         <div class="row">
             <div class="col-md-2"></div>
             <div class="col-md-8">
                 <?php
                 $panel = "panel panel-primary";
-                if ($cinguettii[$i]['tipo'] == 'f') {
+                if ($commenti[$i]['tipo'] == 'f') {
                     $panel = "panel panel-foto";
                     $tipo = 'Foto';
                 }
-                if ($cinguettii[$i]['tipo'] == 't') {
+                if ($commenti[$i]['tipo'] == 't') {
                     $panel = "panel panel-testo";
                     $tipo = 'Testo';
                 }
-                if ($cinguettii[$i]['tipo'] == 'l') {
+                if ($commenti[$i]['tipo'] == 'l') {
                     $panel = "panel panel-luogo";
                     $tipo = 'Luogo';
                 }
                 ?>               
                 <div class="<?php echo $panel; ?>">
-                    <div class="panel-heading">[<?php echo $tipo ?>]&nbsp;<a href="Datiutente.php?email=<?php echo $cinguettii[$i]['email'] ?>"><?php echo $cinguettii[$i]['email'] ?></a>&nbsp;<?php echo $cinguettii[$i]['dataOraCreazione']; ?></div>
+                    <div class="panel-heading">[<?php echo $tipo ?>]&nbsp;<a href="Datiutente.php?email=<?php echo $commenti[$i]['email'] ?>"><?php echo $commenti[$i]['email'] ?></a>&nbsp;<?php echo $commenti[$i]['dataOraCreazione']; ?></div>
                     <div class="panel-body">
-                        <?php if ($tipo == 'Testo') { 
-                            echo $cinguettii[$i]['stringaDaStampare'];                            
-                            ?>
+                        <?php echo $commenti[$i]['stringaDaStampare']; ?>
+                        <?php if ($tipo == 'Testo') { ?>
                             <div class="post_testo pull-right">
-                                <input type="hidden" name="idCinguettio" id="idCinguettio" value="<?php echo $cinguettii[$i]['id']; ?>">
+                                <input type="hidden" name="idCinguettio" id="idCinguettio" value="<?php echo $commenti[$i]['id']; ?>">
                                 <button id="bottone" type="button" class="btn btn-danger">Lista Segnalanti&nbsp; &nbsp; &nbsp; &nbsp; 
                                 </button>
                                 <div class="post_div_testo" id="risultato" style="display: none;"></div>
                             </div> 
 
                             <div class="btn-group pull-right">
-                                <a href="Bacheca.php?segnala=true&id=<?php echo $cinguettii[$i]['id']; ?>"
+                                <a href="Bacheca.php?segnala=true&id=<?php echo $commenti[$i]['id']; ?>"
                                    <button type="button" class="btn btn-danger">&nbsp; 
                                         <span class="glyphicon glyphicon-thumbs-down " aria-hidden="true"></span>
                                         &nbsp; 
@@ -149,28 +74,23 @@ include("head.php");
                                 </a>
                             </div>
                         <?php } ?>
-                        <?php if ($tipo == "Foto") { 
-                             ?>
-                            <a href="Apprezza.php?idCinguettio=<?php echo $cinguettii[$i]['id'];?>"><?php echo $cinguettii[$i]['stringaDaStampare'];?></a>
+                        <?php if ($tipo == "Foto") { ?>
                             <div class="post_foto pull-right">
                                 <button type="button" class="btn btn-primary">Apprezza 
                                     <span class="glyphicon glyphicon-heart-empty " aria-hidden="true"></span>
                                 </button>
                                 <div class="post_div_foto" style="display: none;">
-                                    <form method="GET" action="Apprezza.php">
-                                        <input type="hidden" name="idCinguettio" value="<?php echo $cinguettii[$i]['id']; ?>"/>
+                                    <form method="POST" action="Apprezza.php">
+                                        <input type="hidden" name="idCinguettio" value="<?php echo $commenti[$i]['id']; ?>"/>
                                         <textarea maxlength="50"></textarea><br>
-                                        <input type="submit" value="Conferma">
-                                        <input type="reset" value="Azzera">
+                                        <input type="submit" value="Invia">
                                     </form>
                                 </div>
                             </div>
                         <?php } ?>
-                        <?php if ($tipo == "Luogo") { 
-                            echo $cinguettii[$i]['stringaDaStampare'];
-                            ?>
+                        <?php if ($tipo == "Luogo") { ?>
                             <div class="btn-group pull-right">
-                                <button href="Bacheca.php?preferito=true&utente=<?php echo $cinguettii[$i]['email']; ?>"
+                                <button href="Bacheca.php?preferito=true&utente=<?php echo $commenti[$i]['email']; ?>"
                                         type="button" class="btn btn-success">Preferito &nbsp; 
                                     <span class="glyphicon glyphicon-pushpin" aria-hidden="true"></span></button>
                                 <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -206,7 +126,7 @@ include("head.php");
                     context: this,
                     success: function (msg)
                     {
-                        $(this).find(".post_div_testo").html(msg).toggle(1000);
+                        $(this).find(".post_div_testo").html(msg).toggle();
                     },
                     error: function ()
                     {
