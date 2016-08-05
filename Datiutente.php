@@ -49,7 +49,8 @@ include("head.php");
                 . "<tr><td width='50%' align='right'>Stato di Nascita</td><td>" . $row["statoN"] . "</td></tr>"
                 . "<tr><td width='50%' align='right'>Regione di Nascita</td><td>" . $row["regioneN"] . "</td></tr>"
                 . "<tr><td width='50%' align='right'>Citta' di Nascita</td><td>" . $row["cittaN"] . "</td></tr>"
-                . "<tr><td width='50%' align='right'>Citta' di Residenza</td><td>" . $row["nomeC"] . "</td></tr>";
+                . "<tr><td width='50%' align='right'>Citta' di Residenza</td><td>" . $row["nomeC"] . "</td></tr>"
+                . "<tr><td width='50%' align='right'>Esperto dal</td><td>" . $row["dataUpEsperto"] . "</td></tr>";
             }
         }
         if ($resultSeguiti = db_query($sqlSeguiti)) {

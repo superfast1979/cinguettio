@@ -77,6 +77,11 @@ if (isset($_GET['aggiungi'])) {
     $sqlAggiungi = "INSERT INTO segue (utenteSeguito, utenteCheSegue) "
             . "VALUES('$utenteAggiunto','$utenteCheAggiunge')";
     if ($result = db_query($sqlAggiungi)) {
+        $sqlVerificaEsperto="UPDATE utente SET dataUpEsperto=CURRENT_DATE()"
+                . "WHERE email='$utenteAggiunto'"
+                . "AND 3<=(SELECT COUNT(utenteCheSegue) FROM segue "
+                . "WHERE utenteSeguito='$utenteAggiunto')";
+        $result=db_query($sqlVerificaEsperto);
         header("location: ChiSeguo.php?amico=aggiunto");
     } else {
         $errore = db_error();
@@ -95,6 +100,11 @@ if (isset($_GET['elimina'])) {
         AND utenteSeguito='$utenteEliminato'";
 
     if ($result = db_query($sqlRimuovi)) {
+        $sqlVerificaNonEsperto="UPDATE utente SET dataUpEsperto=NULL"
+                . "WHERE email='$utenteEliminato'"
+                . "AND 3>(SELECT COUNT(utenteCheSegue) FROM segue "
+                . "WHERE utenteSeguito='$utenteEliminato')";
+        $result=db_query($sqlVerificaNonEsperto);
         header("location: ChiSeguo.php?amico=rimosso");
     } else {
         $errore = db_error();
