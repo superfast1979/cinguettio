@@ -32,6 +32,19 @@ include("head.php");
     $sql = "SELECT * FROM utente WHERE email='$email'";
     $sqlSeguaci = "SELECT COUNT(utenteCheSegue) AS NumSeguaci FROM segue WHERE utenteSeguito='$email'";
     $sqlSeguiti = "SELECT COUNT(utenteSeguito) AS NumSeguiti FROM segue WHERE utenteCheSegue='$email'";
+    $sqlContaLuoghi = "SELECT COUNT(l.nomeL) AS contaLuoghi FROM luogo l, preferisce p WHERE p.email='$email' AND l.id=p.id";
+
+
+    $sqlLuoghi = "SELECT l.nomeL, l.latitudine, l.longitudine FROM luogo l, preferisce p WHERE p.email='$email' AND l.id=p.id";
+    $luoghi = array();
+    if ($resultLuoghi = db_query($sqlLuoghi)) {
+        while ($row = mysqli_fetch_assoc($resultLuoghi)) {
+            array_push($luoghi, $row);
+        }
+        mysqli_free_result($resultLuoghi);
+    } else {
+        printf(db_error());
+    }
     ?>
     <div class="col-md-4"></div>
     <div class="col-md-4">
@@ -67,9 +80,32 @@ include("head.php");
         echo "</table>";
 
         if ($_SESSION['email'] == $_GET['email']) {
-            ?><a href="Modificadatiutente.php"><button class="btn btn-primary btn-block">Modifica i tuoi dati</button></a><?php
-        } 
-        ?>
+            ?><a href="Modificadatiutente.php"><button class="btn btn-primary btn-block">Modifica i tuoi dati</button></a><br><br><?php
+        }
+
+        if ($resultContaLuoghi = db_query($sqlContaLuoghi)) {
+            $rowContaLuoghi = mysqli_fetch_assoc($resultContaLuoghi);
+            if ($rowContaLuoghi['contaLuoghi'] != 0) {
+                ?>
+                <center><table class="table" <th><h2>Luoghi Preferiti</h2></th>
+                        <thead>
+                            <tr>
+                                <th>Luogo</th>
+                                <th>Latitudine</th>
+                                <th>Longitudine</th>
+                            </tr>
+                        </thead>
+                        <?php
+                        for ($i = 0; $i < count($luoghi); $i++) {
+                            echo "<tr><td>" . $luoghi[$i]['nomeL'] . "</td>"
+                            . "<td>" . $luoghi[$i]['latitudine'] . "</td> "
+                            . "<td>" . $luoghi[$i]['longitudine'] . "</td></tr>";
+                        }
+                        ?>
+                    </table>
+    <?php }
+} ?>
+
     </div>
     <div class="col-md-4"></div>
     <br><br><br>

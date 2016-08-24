@@ -95,6 +95,21 @@ include("head.php");
         </div>
     </nav>
 
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8"><center>
+            <form class="form-inline" method="GET" action="Creacinguettio.php">
+                <div class="form-group">
+                    <label>Scrivi un cinguettio di tipo: &nbsp;</label>
+                    <input type="radio" name="crea" value="foto"> Foto &nbsp;
+                    <input type="radio" name="crea" value="testo"> Testo &nbsp;
+                    <input type="radio" name="crea" value="luogo"> Luogo &nbsp;&nbsp;
+                </div>
+                <button type="submit" class="btn btn-primary">Crea</button>
+            </form></center>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
     <?php
     for ($i = 0; $i < count($cinguettii); $i++) {
         ?>
@@ -247,8 +262,8 @@ GROUP BY cinguettio.id";
 
         });
     </script>
-    
-    
+
+
     <script type="text/javascript">
         $(document).ready(function () {
 
