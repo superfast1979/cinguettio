@@ -7,6 +7,7 @@ if (!isset($_SESSION['email']) || !isset($_SESSION['pwd'])) {
 }
 
 $email = $_SESSION['email'];
+echo 'ecco il tipo di cinguettio: ' . $_GET['crea'];
 $br = "<br>";
 
 $_SESSION['title'] = "Creazione Cinguettio";
