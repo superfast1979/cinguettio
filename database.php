@@ -23,6 +23,11 @@ function db_query($query) {
     return $result;
 }
 
+function db_insert_id() {
+    $mysqli_conn = db_connect();
+    return mysqli_insert_id($mysqli_conn);
+}
+
 function db_error() {
     $connection = db_connect();
     return mysqli_error($connection);
