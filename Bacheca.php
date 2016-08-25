@@ -154,7 +154,7 @@ GROUP BY cinguettio.id";
                                 ?>
                                 <div class="post_testo pull-right">
                                     <input type="hidden" name="idCinguettio" id="idCinguettio" value="<?php echo $cinguettii[$i]['id']; ?>">
-                                    <button id="bottone" type="button" class="btn btn-danger">Lista Segnalanti&nbsp; &nbsp; &nbsp; &nbsp; 
+                                    <button id="bottone" type="button" class="btn btn-danger">&nbsp; &nbsp; Lista Segnalanti&nbsp; &nbsp;
                                     </button>
                                     <div class="post_div_testo" id="risultato" style="display: none;"></div>
                                 </div> 
@@ -205,19 +205,11 @@ GROUP BY cinguettio.id";
                             } else {
                                 printf(db_error());
                             }
-                            if ($contaPreferenti[$i]['Preferenti'] != 0) {
-                                ?>
-                                <div class="post_luogo pull-right">
-                                    <input type="hidden" name="idCinguettio" id="idCinguettio" value="<?php echo $cinguettii[$i]['id']; ?>">
-                                    <button id="bottone" type="button" class="btn btn-success">Lista Preferenti&nbsp; &nbsp; &nbsp; &nbsp; 
-                                    </button>
-                                    <div class="post_div_testo" id="risultato" style="display: none;"></div>
-                                </div> 
-                            <?php } ?>
+                            ?>
                             <div class="btn-group pull-right">
                                 <a href="Bacheca.php?preferito=true&id=<?php echo $cinguettii[$i]['id']; ?>">
                                     <button type="button" class="btn btn-success">&nbsp; 
-                                        <span class="glyphicon glyphicon-pushpin" aria-hidden="true"></span>
+                                        Aggiungi ai Preferiti &nbsp; <span class="glyphicon glyphicon-pushpin" aria-hidden="true"></span>
                                         &nbsp; 
                                     </button>
                                 </a>
@@ -258,36 +250,6 @@ GROUP BY cinguettio.id";
 
             $(".post_foto").click(function () {
                 $(this).find(".post_div_foto").show(1000);
-            });
-
-        });
-    </script>
-
-
-    <script type="text/javascript">
-        $(document).ready(function () {
-
-            $(".post_luogo").click(function () {
-                var idCinguettio = $(this).find("input").val();
-                $.ajax({
-                    type: "POST",
-                    url: "Preferito.php",
-                    data: "id=" + idCinguettio + "&pref=true",
-                    dataType: "html",
-                    context: this,
-                    success: function (msg)
-                    {
-                        $(this).find(".post_div_luogo").html(msg).toggle(1000);
-                    },
-                    error: function ()
-                    {
-                        alert("Chiamata fallita, si prega di riprovare...");
-                    }
-                });
-            });
-
-            $(".post_luogo").click(function () {
-                $(this).find(".post_div_luogo").show(1000);
             });
 
         });

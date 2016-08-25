@@ -45,48 +45,66 @@ include("head.php");
     } else {
         printf(db_error());
     }
+
+    if ($resultContaLuoghi = db_query($sqlContaLuoghi)) {
+        $rowContaLuoghi = mysqli_fetch_assoc($resultContaLuoghi);
+        if ($rowContaLuoghi['contaLuoghi'] != 0) {
+            $marginesterno = '<div class="col-md-2">';
+            $margineinterno = '<div class="col-md-0">';
+            $spaziotabelle = '<div class="col-md-4">';
+        } else {
+            $marginesterno = '<div class="col-md-4">';
+            $margineinterno = '<div class="col-md-0">';
+            $spaziotabelle = '<div class="col-md-4">';
+        }
+    }
     ?>
-    <div class="col-md-4"></div>
-    <div class="col-md-4">
-        <?php
-        if ($result = db_query($sql)) {
-            echo "<center><table class=\"table\" <th><h2>Dati Utente</h2></th>";
-            // output data of each row
-            while ($row = $result->fetch_assoc()) {
-                echo "<tr><td width='50%' align='right'>Nome</td><td>" . $row["nome"] . "</td></tr>"
-                . "<tr><td width='50%' align='right'>Cognome</td><td>" . $row["cognome"] . "</td></tr> "
-                . "<tr><td width='50%' align='right'>Nickname</td><td>" . $row["nickname"] . "</td></tr>"
-                . "<tr><td width='50%' align='right'>Hobby</td><td>" . $row["hobby"] . "</td></tr>"
-                . "<tr><td width='50%' align='right'>Data di Nascita</td><td>" . $row["dataNascita"] . "</td></tr>"
-                . "<tr><td width='50%' align='right'>Sesso</td><td>" . $row["sesso"] . "</td></tr>"
-                . "<tr><td width='50%' align='right'>Stato di Nascita</td><td>" . $row["statoN"] . "</td></tr>"
-                . "<tr><td width='50%' align='right'>Regione di Nascita</td><td>" . $row["regioneN"] . "</td></tr>"
-                . "<tr><td width='50%' align='right'>Citta' di Nascita</td><td>" . $row["cittaN"] . "</td></tr>"
-                . "<tr><td width='50%' align='right'>Citta' di Residenza</td><td>" . $row["nomeC"] . "</td></tr>"
-                . "<tr><td width='50%' align='right'>Esperto dal</td><td>" . $row["dataUpEsperto"] . "</td></tr>";
-            }
+    <?php echo $marginesterno ?>
+    </div>
+    <?php echo $spaziotabelle ?>
+    <?php
+    if ($result = db_query($sql)) {
+        echo "<center><table class=\"table\" <th><h2>Dati Utente</h2></th>";
+        // output data of each row
+        while ($row = $result->fetch_assoc()) {
+            echo "<tr><td width='50%' align='right'>Nome</td><td>" . $row["nome"] . "</td></tr>"
+            . "<tr><td width='50%' align='right'>Cognome</td><td>" . $row["cognome"] . "</td></tr> "
+            . "<tr><td width='50%' align='right'>Nickname</td><td>" . $row["nickname"] . "</td></tr>"
+            . "<tr><td width='50%' align='right'>Hobby</td><td>" . $row["hobby"] . "</td></tr>"
+            . "<tr><td width='50%' align='right'>Data di Nascita</td><td>" . $row["dataNascita"] . "</td></tr>"
+            . "<tr><td width='50%' align='right'>Sesso</td><td>" . $row["sesso"] . "</td></tr>"
+            . "<tr><td width='50%' align='right'>Stato di Nascita</td><td>" . $row["statoN"] . "</td></tr>"
+            . "<tr><td width='50%' align='right'>Regione di Nascita</td><td>" . $row["regioneN"] . "</td></tr>"
+            . "<tr><td width='50%' align='right'>Citta' di Nascita</td><td>" . $row["cittaN"] . "</td></tr>"
+            . "<tr><td width='50%' align='right'>Citta' di Residenza</td><td>" . $row["nomeC"] . "</td></tr>"
+            . "<tr><td width='50%' align='right'>Esperto dal</td><td>" . $row["dataUpEsperto"] . "</td></tr>";
         }
-        if ($resultSeguiti = db_query($sqlSeguiti)) {
-            while ($rowSeguiti = mysqli_fetch_assoc($resultSeguiti)) {
-                echo "<tr><td width='50%' align='right'>Amici Seguiti</td><td>" . $rowSeguiti["NumSeguiti"] . "</td></tr>";
-            }
+    }
+    if ($resultSeguiti = db_query($sqlSeguiti)) {
+        while ($rowSeguiti = mysqli_fetch_assoc($resultSeguiti)) {
+            echo "<tr><td width='50%' align='right'>Amici Seguiti</td><td>" . $rowSeguiti["NumSeguiti"] . "</td></tr>";
         }
-        if ($resultSeguaci = db_query($sqlSeguaci)) {
-            while ($rowSeguaci = mysqli_fetch_assoc($resultSeguaci)) {
-                echo "<tr><td width='50%' align='right'>Amici Che Seguono</td><td>" . $rowSeguaci["NumSeguaci"] . "</td></tr>";
-            }
+    }
+    if ($resultSeguaci = db_query($sqlSeguaci)) {
+        while ($rowSeguaci = mysqli_fetch_assoc($resultSeguaci)) {
+            echo "<tr><td width='50%' align='right'>Amici Che Seguono</td><td>" . $rowSeguaci["NumSeguaci"] . "</td></tr>";
         }
+    }
 
-        echo "</table>";
+    echo "</table>";
 
-        if ($_SESSION['email'] == $_GET['email']) {
-            ?><a href="Modificadatiutente.php"><button class="btn btn-primary btn-block">Modifica i tuoi dati</button></a><br><br><?php
+    if ($_SESSION['email'] == $_GET['email']) {
+        ?><a href="Modificadatiutente.php"><button class="btn btn-primary btn-block">Modifica i tuoi dati</button></a><br><br><?php
         }
-
-        if ($resultContaLuoghi = db_query($sqlContaLuoghi)) {
-            $rowContaLuoghi = mysqli_fetch_assoc($resultContaLuoghi);
-            if ($rowContaLuoghi['contaLuoghi'] != 0) {
-                ?>
+        ?>
+    </div>
+    <?php echo $margineinterno ?></div>
+    <?php echo $spaziotabelle ?>
+<?php
+if ($resultContaLuoghi = db_query($sqlContaLuoghi)) {
+    $rowContaLuoghi = mysqli_fetch_assoc($resultContaLuoghi);
+    if ($rowContaLuoghi['contaLuoghi'] != 0) {
+        ?>
                 <center><table class="table" <th><h2>Luoghi Preferiti</h2></th>
                         <thead>
                             <tr>
@@ -95,19 +113,20 @@ include("head.php");
                                 <th>Longitudine</th>
                             </tr>
                         </thead>
-                        <?php
-                        for ($i = 0; $i < count($luoghi); $i++) {
-                            echo "<tr><td>" . $luoghi[$i]['nomeL'] . "</td>"
-                            . "<td>" . $luoghi[$i]['latitudine'] . "</td> "
-                            . "<td>" . $luoghi[$i]['longitudine'] . "</td></tr>";
-                        }
-                        ?>
+        <?php
+        for ($i = 0; $i < count($luoghi); $i++) {
+            echo "<tr><td>" . $luoghi[$i]['nomeL'] . "</td>"
+            . "<td>" . $luoghi[$i]['latitudine'] . "</td> "
+            . "<td>" . $luoghi[$i]['longitudine'] . "</td></tr>";
+        }
+        ?>
                     </table>
-    <?php }
-} ?>
+                    <?php }
+                }
+                ?>
 
     </div>
-    <div class="col-md-4"></div>
+    <?php echo $marginesterno ?></div>
     <br><br><br>
 </body>
 
