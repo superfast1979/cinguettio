@@ -1,6 +1,8 @@
 <?php
 session_start();
 require_once("database.php");
+require_once("utility.php");
+
 if (!isset($_SESSION['email']) || !isset($_SESSION['pwd'])) {
     echo "Non sei connesso!";
     die;
@@ -9,12 +11,13 @@ if (!isset($_SESSION['email']) || !isset($_SESSION['pwd'])) {
 $email = $_SESSION['email'];
 $br = "<br>";
 
+function rimuovi_cinguettio($id, $error) {
+    $sql = "DELETE FROM `cinguettio` WHERE id = '$id'";
+    db_query($sql);
+    header("location: Creacinguettio.php?crea=foto&upload_error=$error");
+}
+
 if (isset($_POST['crea'])) {
-    //$dataOraCreazione = CURRENT_TIMESTAMP();
-//    $sqlId = "SELECT MAX(id) AS maxId FROM cinguettio";
-//    $resultId = db_query($sqlId);
-//    $rowId = mysqli_fetch_assoc($resultId);
-//    $id = $rowId['maxId'] + 1;
 
     $sqlIdProg = "SELECT MAX(idProg) AS maxIdProg FROM cinguettio WHERE email='$email'";
     $resultIdProg = db_query($sqlIdProg);
@@ -23,26 +26,35 @@ if (isset($_POST['crea'])) {
 
     if (($_POST['crea'] == 'testo')) {
         $tipo = 't';
-        $testo = addslashes($_POST['testo']);
+    } else if (($_POST['crea'] == 'luogo')) {
+        $tipo = 'l';
+    } else {
+        $tipo = 'f';
+    }
 
-        $sql = "INSERT INTO `cinguettio` (`idProg`, `tipo`, `email`) "
-                . "VALUES ('$idProg', '$tipo', '$email')";
-        print($sql);
-        if ($resultSql = db_query($sql)) {
-            $id = db_insert_id();
-            $sqlTesto = "INSERT INTO testo (id, testo) VALUES ('$id', '$testo')";
-            print($sqlTesto);
-            if ($resultTesto = db_query($sqlTesto)) {
-                header("location: Bacheca.php");
-            } else {
-                $errore = db_error();
-            }
+    $sql = "INSERT INTO `cinguettio` (`idProg`, `tipo`, `email`) "
+            . "VALUES ('$idProg', '$tipo', '$email')";
+    print($sql);
+    
+    if ($resultSql = db_query($sql)) {
+        $id = db_insert_id();
+    } else {
+        $error = db_error();
+        header("location: Creacinguettio.php?crea=foto&upload_error=$error");
+    }
+
+    if (($_POST['crea'] == 'testo')) {
+        $testo = addslashes($_POST['testo']);
+        $sqlTesto = "INSERT INTO testo (id, testo) VALUES ('$id', '$testo')";
+        print($sqlTesto);
+        if ($resultTesto = db_query($sqlTesto)) {
+            header("location: Bacheca.php");
         } else {
-            $errore = db_error();
+            rimuovi_cinguettio($id, db_error());
         }
     }
 
-    /*  if(($_POST['creazione']=='luogo')){
+    /*  if(($_POST['crea']=='luogo')){
       $nomeL= addslashes($_POST['nomeL']);
       $latitudine= addslashes($_POST['latitudine']);
       $longitudine= addslashes($_POST['longitudine']);
@@ -54,20 +66,49 @@ if (isset($_POST['crea'])) {
       $errore = db_error();
       }
       }
+     */
 
-      if(($_POST['creazione']=='foto')){
-      $nomeF= addslashes($_POST['nomeF']);
-      $path= addslashes($_POST['path']);
-      $descrizione= addslashes($_POST['descrizione']);
-      $dataCaricamento= CURRENT_DATE();
-      $sqlFoto="INSERT INTO foto (id, nomeF, path, descrizione, dataCaricamento) "
-      . "VALUES ('$id', '$nomeF', '$path', '$descrizione', '$dataCaricamento')";
-      if($resultFoto=db_query($sqlFoto)){
-      header("location: Bacheca.php");
-      } else {
-      $errore = db_error();
-      }
-      } */
+    if (($_POST['crea'] == 'foto')) {
+        /*
+         *  http://www.w3schools.com/php/php_file_upload.asp 
+         *  http://php.net/manual/en/features.file-upload.post-method.php
+         */
+
+        $target_dir = "foto/";
+        $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
+        $imageFileType = pathinfo($target_file, PATHINFO_EXTENSION);
+
+        $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+        if ($check === false) {
+            rimuovi_cinguettio($id, "Il file non è una immagine oppure size superiore a 2 MBytes");
+        }
+
+        // Check if file already exists
+        if (file_exists($target_file)) {
+            rimuovi_cinguettio($id, "Il file esiste nella cartella di destinazione");
+        }
+
+        // Check file size: max 2MB
+        if ($_FILES["fileToUpload"]["size"] > 2000000) {
+            rimuovi_cinguettio($id, "size superiore a 2 MBytes");
+        }
+
+        if (!move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+            rimuovi_cinguettio($id, "errore nel caricamento file");
+        }
+
+        $nomeF = addslashes(basename($_FILES["fileToUpload"]["name"]));
+        $path = addslashes($target_dir);
+        $descrizione = addslashes($_POST['description']);
+        $sqlFoto = "INSERT INTO foto (id, nomeF, path, descrizione, dataCaricamento) "
+                . "VALUES ('$id', '$nomeF', '$path', '$descrizione', CURRENT_DATE())";
+        print($sqlFoto);
+        if ($resultFoto = db_query($sqlFoto)) {
+            header("location: Bacheca.php");
+        } else {
+            rimuovi_cinguettio($id, db_error());
+        }
+    }
 }
 
 $_SESSION['title'] = "Creazione Cinguettio";
@@ -92,7 +133,7 @@ include("head.php");
 
     <div class="col-md-4"></div>
     <div class="col-md-4">
-<?php if ($_GET['crea'] == 'testo') { ?>
+        <?php if ($_GET['crea'] == 'testo') { ?>
             <form method="POST" action="Creacinguettio.php" class = "form-horizontal">
                 <div class = "form-group text-center">
                     <label class = "text-center"> Stai scrivendo un cinguettio di tipo &nbsp;
@@ -110,13 +151,39 @@ include("head.php");
                     </div>
                 </div>
             </form>
-    <?php
-}
+            <?php
+        }
 
-if ($_GET['crea'] == 'foto') {
-    ?>
+        if ($_GET['crea'] == 'foto') {
+            ?>
+            <form action="Creacinguettio.php" method="post" enctype="multipart/form-data">
+                <div class = "form-group text-center">
+                    <label class = "text-center"> Stai scrivendo un cinguettio di tipo &nbsp;
+                        <input type="radio" name="tipo" value="f" checked> &nbsp;Foto </label>
+                </div>
+                <div class = "form-group">
+                    <label for = "inputTesto" class = "col-sm-2 control-label">Seleziona una immagine da caricare</label>
+                    <input type="file" name="fileToUpload" id="fileToUpload">
+                </div>   
+                <div class = "form-group">
+                    <label for = "inputTesto" class = "col-sm-2 control-label">Testo</label>
+                    <div class = "col-sm-10">
+                        <input type = "text" maxlength="20" name="description" class = "form-control" placeholder = "Scrivi qui...">
+                    </div>
+                </div>                
+                <div class = "form-group">
+                    <div class = "col-sm-offset-6 col-sm-6">
+                        <button type = "submit" name="crea" value="foto" class = "btn btn-primary">Crea</button>
+                    </div>
+                </div>
+            </form>
 
             <?php
+            if (isset($_GET['upload_error']) && isValidInput($_GET['upload_error'])) {
+                ?>
+                <p> <?php echo $_GET['upload_error']; ?> </p>
+                <?php
+            }
         }
 
         if ($_GET['crea'] == 'luogo') {

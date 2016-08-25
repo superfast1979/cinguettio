@@ -1,5 +1,9 @@
 <?php
 
+function isValidInput($str) {
+    return (isset($str) && $str != "");
+}
+
 function UserExists($email) {
     $sql = "SELECT * FROM Utente WHERE email='$email'";
 

@@ -1,6 +1,8 @@
 <?php
 session_start();
 require_once("database.php");
+require_once("utility.php");
+
 if (!isset($_SESSION['email']) || !isset($_SESSION['pwd'])) {
     echo "Non sei connesso!";
     die;
@@ -13,10 +15,6 @@ $panel = "panel panel-default";
 
 $_SESSION['title'] = "Chi Seguo";
 include("head.php");
-
-function isValidInput($str) {
-    return (isset($str) && $str != "");
-}
 
 if (isset($_POST['cerca'])) {
 
