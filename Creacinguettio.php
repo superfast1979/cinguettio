@@ -35,7 +35,7 @@ if (isset($_POST['crea'])) {
     $sql = "INSERT INTO `cinguettio` (`idProg`, `tipo`, `email`) "
             . "VALUES ('$idProg', '$tipo', '$email')";
     print($sql);
-    
+
     if ($resultSql = db_query($sql)) {
         $id = db_insert_id();
     } else {
@@ -54,19 +54,19 @@ if (isset($_POST['crea'])) {
         }
     }
 
-    /*  if(($_POST['crea']=='luogo')){
-      $nomeL= addslashes($_POST['nomeL']);
-      $latitudine= addslashes($_POST['latitudine']);
-      $longitudine= addslashes($_POST['longitudine']);
-      $sqlLuogo="INSERT INTO luogo (id, nomeL, latitudine, longitudine) "
-      . "VALUES ('$id', '$nomeL', '$latitudine', '$longitudine')";
-      if($resultLuogo=db_query($sqlLuogo)){
-      header("location: Bacheca.php");
-      } else {
-      $errore = db_error();
-      }
-      }
-     */
+    if (($_POST['crea'] == 'luogo')) {
+        $nomeL = addslashes($_POST['nomeL']);
+        $latitudine = addslashes($_POST['latitudine']);
+        $longitudine = addslashes($_POST['longitudine']);
+        $sqlLuogo = "INSERT INTO luogo (id, nomeL, latitudine, longitudine) "
+                . "VALUES ('$id', '$nomeL', '$latitudine', '$longitudine')";
+        if ($resultLuogo = db_query($sqlLuogo)) {
+            header("location: Bacheca.php");
+        } else {
+            rimuovi_cinguettio($id, db_error());
+        }
+    }
+
 
     if (($_POST['crea'] == 'foto')) {
         /*
@@ -161,18 +161,18 @@ include("head.php");
                     <label class = "text-center"> Stai scrivendo un cinguettio di tipo &nbsp;
                         <input type="radio" name="tipo" value="f" checked> &nbsp;Foto </label>
                 </div>
-                <div class = "form-group">
-                    <label for = "inputTesto" class = "col-sm-2 control-label">Seleziona una immagine da caricare</label>
-                    <input type="file" name="fileToUpload" id="fileToUpload">
+                <div class = "form-group text-center">
+                    <label for = "sfoglia" class = "control-label">Seleziona una immagine da caricare</label>
+                    <center><input type="file" name="fileToUpload" id="fileToUpload"></center>
                 </div>   
-                <div class = "form-group">
-                    <label for = "inputTesto" class = "col-sm-2 control-label">Testo</label>
-                    <div class = "col-sm-10">
+                <div class = "form-group text-center">
+                    <label for = "inputTesto" class = "control-label">Descrizione</label>
+                    <div class = "text-center">
                         <input type = "text" maxlength="20" name="description" class = "form-control" placeholder = "Scrivi qui...">
                     </div>
                 </div>                
                 <div class = "form-group">
-                    <div class = "col-sm-offset-6 col-sm-6">
+                    <div class = "text-center">
                         <button type = "submit" name="crea" value="foto" class = "btn btn-primary">Crea</button>
                     </div>
                 </div>
@@ -188,7 +188,35 @@ include("head.php");
 
         if ($_GET['crea'] == 'luogo') {
             ?>
-
+            <form method="POST" action="Creacinguettio.php" class = "form-horizontal">
+                <div class = "form-group text-center">
+                    <label class = "text-center"> Stai scrivendo un cinguettio di tipo &nbsp;
+                        <input type="radio" name="tipo" value="l" checked> &nbsp;Luogo </label>
+                </div>
+                <div class = "form-group">
+                    <label for = "inputTesto" class = "col-sm-4 control-label">Nome del Luogo</label>
+                    <div class = "col-sm-8">
+                        <input type = "text" maxlength="20" name="nomeL" class = "form-control" placeholder = "Scrivi il nome del luogo qui...">
+                    </div>
+                </div>
+                <div class = "form-group">
+                    <label for = "inputTesto" class = "col-sm-4 control-label">Latitudine</label>
+                    <div class = "col-sm-8">
+                        <input type = "text" maxlength="20" name="latitudine" class = "form-control" placeholder = "Formato xx.yyyyyy">
+                    </div>
+                </div>
+                <div class = "form-group">
+                    <label for = "inputTesto" class = "col-sm-4 control-label">Longitudine</label>
+                    <div class = "col-sm-8">
+                        <input type = "text" maxlength="20" name="longitudine" class = "form-control" placeholder = "Formato xx.yyyyyy">
+                    </div>
+                </div>
+                <div class = "form-group">
+                    <div class = "col-sm-offset-6 col-sm-6">
+                        <button type = "submit" name="crea" value="luogo" class = "btn btn-primary">Crea</button>
+                    </div>
+                </div>
+            </form>
         <?php }
         ?>
     </div>

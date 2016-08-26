@@ -19,7 +19,7 @@ $sql = "SELECT * FROM
  WHERE (s.utenteCheSegue='$email' AND s.utenteSeguito=u.email AND c.email=u.email AND c.id=t.id) 
   OR (s.utenteCheSegue='$email' AND s.utenteCheSegue=u.email AND c.email=u.email AND c.id=t.id)
     UNION
-    SELECT DISTINCT u.email, c.dataOraCreazione, CONCAT(f.path,' ',f.nomeF,' ',f.descrizione) AS stringaDaStampare, c.tipo, c.id
+    SELECT DISTINCT u.email, c.dataOraCreazione, CONCAT(f.descrizione,' ',' ','[',f.path,f.nomeF,']') AS stringaDaStampare, c.tipo, c.id
  FROM segue s, utente u, foto f, cinguettio c 
  WHERE (s.utenteCheSegue='$email' AND s.utenteSeguito=u.email AND c.email=u.email AND c.id=f.id) 
   OR (s.utenteCheSegue='$email' AND s.utenteCheSegue=u.email AND c.email=u.email AND c.id=f.id)) AS t
@@ -174,7 +174,7 @@ GROUP BY cinguettio.id";
                         ?>
                         <?php if ($tipo == "Foto") {
                             ?>
-                            <a href="Apprezza.php?idCinguettio=<?php echo $cinguettii[$i]['id']; ?>"><?php echo $cinguettii[$i]['stringaDaStampare']; ?></a>
+                            <a id="bachecafoto" href="Apprezza.php?idCinguettio=<?php echo $cinguettii[$i]['id']; ?>"><?php echo $cinguettii[$i]['stringaDaStampare']; ?></a>
                             <div class="post_foto pull-right">
                                 <button type="button" class="btn btn-primary">Apprezza 
                                     <span class="glyphicon glyphicon-heart-empty " aria-hidden="true"></span>
