@@ -182,7 +182,7 @@ GROUP BY cinguettio.id";
                                 <div class="post_div_foto" style="display: none;">
                                     <form method="GET" action="Apprezza.php">
                                         <input type="hidden" name="idCinguettio" value="<?php echo $cinguettii[$i]['id']; ?>"/>
-                                        <textarea maxlength="50"></textarea><br>
+                                        <textarea name="testoApprezzaCinguettio" maxlength="50"></textarea><br>
                                         <input type="submit" value="Conferma">
                                         <input type="reset" value="Azzera">
                                     </form>

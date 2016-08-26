@@ -8,6 +8,13 @@ if (!isset($_SESSION['email']) || !isset($_SESSION['pwd'])) {
 
 $email = $_SESSION['email'];
 $idFotoStampa = $_GET['idCinguettio'];
+if (isset($_GET['testoApprezzaCinguettio'])) {
+    $testoAppprezzaCinguettio = $_GET['testoApprezzaCinguettio'];
+    $sqlApprezza = "INSERT INTO apprezzamento (id, email, dataOraC, commento) "
+            . "VALUES ('$idFotoStampa', '$email', CURRENT_TIMESTAMP(), '$testoAppprezzaCinguettio')";
+    db_query($sqlApprezza);
+}
+
 $error = "";
 
 $sqlEmail = "SELECT email, dataOraCreazione FROM cinguettio WHERE id='$idFotoStampa'";
@@ -51,7 +58,7 @@ include("head.php");
             </ul>
         </div>
     </nav>
-                
+
     <div class="row">
         <div class="col-md-4"></div>
         <div class="col-md-4">
@@ -71,7 +78,7 @@ include("head.php");
                         <?php echo $apprezzamenti[$i]['commento'] ?>
                     </div>
                 </div>
-                <?php } ?>
+            <?php } ?>
         </div>
         <div class="col-md-4"></div>
     </div>
