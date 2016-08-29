@@ -27,7 +27,8 @@ if ($resultStampaFoto = db_query($sqlStampaFoto)) {
     $rowStampaFoto = mysqli_fetch_assoc($resultStampaFoto);
 }
 
-$sqlApprezzamenti = "SELECT commento, email, dataOraC FROM apprezzamento WHERE id='$idFotoStampa'";
+$sqlApprezzamenti = "SELECT commento, email, dataOraC FROM apprezzamento "
+        . "WHERE id='$idFotoStampa' ORDER BY dataOraC desc";
 $apprezzamenti = array();
 if ($resultApprezzamenti = db_query($sqlApprezzamenti)) {
     while ($rowApprezzamenti = mysqli_fetch_assoc($resultApprezzamenti)) {
@@ -66,7 +67,7 @@ include("head.php");
                 <div class="panel-heading ">[F]&nbsp;<a href="Datiutente.php?email=<?php echo $rowEmail['email'] ?>"><?php echo $rowEmail['email'] ?></a>&nbsp;<?php echo $rowEmail['dataOraCreazione']; ?></div>
                 <div class="panel-body">
                     <?php echo $rowStampaFoto['descrizione'] ?> <br>
-                    <img src="<?php echo $rowStampaFoto['RelPath'] ?>" align="center">
+                    <img style="max-width:242px;max-height:200px;" src="<?php echo $rowStampaFoto['RelPath'] ?>" align="center">
                 </div>
             </div>
             <?php

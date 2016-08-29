@@ -19,7 +19,7 @@ $sql = "SELECT * FROM
  WHERE (s.utenteCheSegue='$email' AND s.utenteSeguito=u.email AND c.email=u.email AND c.id=t.id) 
   OR (s.utenteCheSegue='$email' AND s.utenteCheSegue=u.email AND c.email=u.email AND c.id=t.id)
     UNION
-    SELECT DISTINCT u.email, c.dataOraCreazione, CONCAT(f.descrizione,' ',' ','[',f.path,f.nomeF,']') AS stringaDaStampare, c.tipo, c.id
+    SELECT DISTINCT u.email, c.dataOraCreazione, CONCAT(f.descrizione,' ',' .:',f.path,f.nomeF,':.') AS stringaDaStampare, c.tipo, c.id
  FROM segue s, utente u, foto f, cinguettio c 
  WHERE (s.utenteCheSegue='$email' AND s.utenteSeguito=u.email AND c.email=u.email AND c.id=f.id) 
   OR (s.utenteCheSegue='$email' AND s.utenteCheSegue=u.email AND c.email=u.email AND c.id=f.id)) AS t
@@ -98,15 +98,15 @@ include("head.php");
     <div class="row">
         <div class="col-md-2"></div>
         <div class="col-md-8"><center>
-            <form class="form-inline" method="GET" action="Creacinguettio.php">
-                <div class="form-group">
-                    <label>Scrivi un cinguettio di tipo: &nbsp;</label>
-                    <input type="radio" name="crea" value="foto"> Foto &nbsp;
-                    <input type="radio" name="crea" value="testo"> Testo &nbsp;
-                    <input type="radio" name="crea" value="luogo"> Luogo &nbsp;&nbsp;
-                </div>
-                <button type="submit" class="btn btn-primary">Crea</button>
-            </form></center>
+                <form class="form-inline" method="GET" action="Creacinguettio.php">
+                    <div class="form-group">
+                        <label>Scrivi un cinguettio di tipo: &nbsp;</label>
+                        <input type="radio" name="crea" value="foto"> Foto &nbsp;
+                        <input type="radio" name="crea" value="testo"> Testo &nbsp;
+                        <input type="radio" name="crea" value="luogo"> Luogo &nbsp;&nbsp;
+                    </div>
+                    <button type="submit" class="btn btn-primary">Crea</button>
+                </form></center>
         </div>
         <div class="col-md-2"></div>
     </div>
@@ -137,20 +137,15 @@ include("head.php");
                         <?php
                         if ($tipo == 'Testo') {
                             echo $cinguettii[$i]['stringaDaStampare'];
-                            $contaSegnalanti = array();
+
                             $idContaCinguettio = $cinguettii[$i]['id'];
-                            $sqlNumSeg = "SELECT COUNT(segnalainappropriato.email) AS Segnalanti
-FROM segnalainappropriato RIGHT OUTER JOIN cinguettio ON segnalainappropriato.id='$idContaCinguettio'
-GROUP BY cinguettio.id";
-                            if ($resultNumSeg = db_query($sqlNumSeg)) {
-                                while ($row = $resultNumSeg->fetch_assoc()) {
-                                    array_push($contaSegnalanti, $row);
-                                }
-                                mysqli_free_result($resultNumSeg);
-                            } else {
-                                printf(db_error());
-                            }
-                            if ($contaSegnalanti[$i]['Segnalanti'] != 0) {
+                            $sqlContaSeg = "SELECT COUNT(s.email) AS Segnalanti 
+                                FROM segnalainappropriato s 
+                                WHERE s.id='$idContaCinguettio' ";
+                            if ($resultContaSeg = db_query($sqlContaSeg))
+                                $rowContaSeg = mysqli_fetch_assoc($resultContaSeg);
+
+                            if ($rowContaSeg['Segnalanti'] != 0) {
                                 ?>
                                 <div class="post_testo pull-right">
                                     <input type="hidden" name="idCinguettio" id="idCinguettio" value="<?php echo $cinguettii[$i]['id']; ?>">
@@ -173,22 +168,57 @@ GROUP BY cinguettio.id";
                         }
                         ?>
                         <?php if ($tipo == "Foto") {
-                            ?>
-                            <a id="bachecafoto" href="Apprezza.php?idCinguettio=<?php echo $cinguettii[$i]['id']; ?>"><?php echo $cinguettii[$i]['stringaDaStampare']; ?></a>
-                            <div class="post_foto pull-right">
-                                <button type="button" class="btn btn-primary">Apprezza 
-                                    <span class="glyphicon glyphicon-heart-empty " aria-hidden="true"></span>
-                                </button>
-                                <div class="post_div_foto" style="display: none;">
-                                    <form method="GET" action="Apprezza.php">
-                                        <input type="hidden" name="idCinguettio" value="<?php echo $cinguettii[$i]['id']; ?>"/>
-                                        <textarea name="testoApprezzaCinguettio" maxlength="50"></textarea><br>
-                                        <input type="submit" value="Conferma">
-                                        <input type="reset" value="Azzera">
-                                    </form>
+                            $idContaCinguettio = $cinguettii[$i]['id'];
+                            $sqlFoto = "SELECT CONCAT(path,nomeF) AS pathRelBac 
+                                FROM foto 
+                                WHERE id='$idContaCinguettio' ";
+                            if ($resultFoto = db_query($sqlFoto))
+                                $rowFoto = mysqli_fetch_assoc($resultFoto);
+                            $pathRelBac=$rowFoto['pathRelBac'];?>
+                        <div class="row">
+                                <div class="col-md-4"></div>
+                                <div class="col-md-4">
+                                    <a id="bachecafoto" class="thumbnail text-center" href="Apprezza.php?idCinguettio=<?php echo $cinguettii[$i]['id']; ?>"><?php echo $cinguettii[$i]['stringaDaStampare']; ?>
+                                        <img style="max-width:242px;max-height:200px;" src="<?php echo $pathRelBac;?>">
+                                    </a>
                                 </div>
+                                <div class="col-md-4"></div>                            
                             </div>
-                        <?php } ?>
+                            
+                            <?php
+                            $sqlComm = "SELECT u.dataUpEsperto "
+                                    . "FROM utente u "
+                                    . "WHERE u.email='$email'";
+                            if ($resultComm = db_query($sqlComm))
+                                $rowComm = mysqli_fetch_assoc($resultComm);
+
+                            $sqlContaComm = "SELECT COUNT(a.commento) AS ContaComm 
+                                FROM apprezzamento a 
+                                WHERE a.id='$idContaCinguettio' and a.email='$email'";
+                            if ($resultContaComm = db_query($sqlContaComm))
+                                $rowContaComm = mysqli_fetch_assoc($resultContaComm);
+
+                            if ($cinguettii[$i]['email'] != $email) {
+                                if ($rowComm['dataUpEsperto'] != '') {
+                                    if ($rowContaComm['ContaComm'] < 3) {
+                                        ?>                            
+                                        <div class="post_foto pull-right">
+                                            <button type="button" class="btn btn-primary">Apprezza 
+                                                <span class="glyphicon glyphicon-heart-empty " aria-hidden="true"></span>
+                                            </button>
+                                            <div class="post_div_foto" style="display: none;">
+                                                <form method="GET" action="Apprezza.php">
+                                                    <input type="hidden" name="idCinguettio" value="<?php echo $cinguettii[$i]['id']; ?>"/>
+                                                    <textarea name="testoApprezzaCinguettio" maxlength="50"></textarea><br>
+                                                    <input type="submit" value="Conferma">
+                                                    <input type="reset" value="Azzera">
+                                                </form>
+                                            </div>
+                                        </div>
+                                    <?php }
+                                }
+                            }
+                        } ?>
                         <?php
                         if ($tipo == 'Luogo') {
                             echo $cinguettii[$i]['stringaDaStampare'];
@@ -214,17 +244,17 @@ GROUP BY cinguettio.id";
                                     </button>
                                 </a>
                             </div>
-                            <?php
-                        }
-                        ?>
+        <?php
+    }
+    ?>
                     </div>
                 </div>
             </div>
             <div class="col-md-2"></div>
         </div>
-        <?php
-    }
-    ?>
+    <?php
+}
+?>
     <p><?php echo $error; ?></p>
     <script type="text/javascript">
         $(document).ready(function () {
