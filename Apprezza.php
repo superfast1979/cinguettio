@@ -67,7 +67,7 @@ include("head.php");
                 <div class="panel-heading ">[F]&nbsp;<a href="Datiutente.php?email=<?php echo $rowEmail['email'] ?>"><?php echo $rowEmail['email'] ?></a>&nbsp;<?php echo $rowEmail['dataOraCreazione']; ?></div>
                 <div class="panel-body">
                     <?php echo $rowStampaFoto['descrizione'] ?> <br>
-                    <img style="max-width:242px;max-height:200px;" src="<?php echo $rowStampaFoto['RelPath'] ?>" align="center">
+                    <img class="img-thumbnail" src="<?php echo $rowStampaFoto['RelPath'] ?>" align="center">
                 </div>
             </div>
             <?php

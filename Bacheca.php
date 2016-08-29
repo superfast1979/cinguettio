@@ -177,9 +177,9 @@ include("head.php");
                             $pathRelBac=$rowFoto['pathRelBac'];?>
                         <div class="row">
                                 <div class="col-md-4"></div>
-                                <div class="col-md-4">
-                                    <a id="bachecafoto" class="thumbnail text-center" href="Apprezza.php?idCinguettio=<?php echo $cinguettii[$i]['id']; ?>"><?php echo $cinguettii[$i]['stringaDaStampare']; ?>
-                                        <img style="max-width:242px;max-height:200px;" src="<?php echo $pathRelBac;?>">
+                                <div class="col-md-4 text-center">
+                                    <a id="bachecafoto" href="Apprezza.php?idCinguettio=<?php echo $cinguettii[$i]['id']; ?>"><?php echo $cinguettii[$i]['stringaDaStampare']; ?>
+                                        <img class="img-thumbnail" src="<?php echo $pathRelBac;?>">
                                     </a>
                                 </div>
                                 <div class="col-md-4"></div>                            
