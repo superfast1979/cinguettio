@@ -5,7 +5,7 @@ function db_connect() {
     static $mysqli;
 
     if (!isset($mysqli)) {
-        $config = parse_ini_file('./configDb.ini');
+        $config = parse_ini_file('./conf/configDb.ini');
         $mysqli = mysqli_connect($config['host'], $config['username'], $config['password'], $config['dbname']);
     }
 

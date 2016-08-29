@@ -34,7 +34,7 @@ include("head.php");
     <div class="row">		
         <div class="col-md-4 col-sm-2 col-xs-1"></div>
         <div class="col-md-4 col-sm-8 col-xs-10">
-            <img src="cinguettio logo-03.png" width="" height="" class="img-responsive" alt="Responsive image">
+            <img src="images/cinguettio logo-03.png" width="" height="" class="img-responsive" alt="Responsive image">
             <br>
             <form class="form-horizontal" method="post" action="Login.php">
                 <div class="form-group">

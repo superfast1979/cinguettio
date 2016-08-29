@@ -46,7 +46,7 @@ if (isset($_POST['ok'])) {
                 <h1 class="form-group">
                     <label for="moreSpace" class="col-sm-9 control-label "> <br>Registrazione</label>
                     <div class="col-sm-3">
-                        <img src="cinguettio logo-04.png" class="img-responsive"  alt="Responsive image" align="center">
+                        <img src="images/cinguettio logo-04.png" class="img-responsive"  alt="Responsive image" align="center">
                     </div>
                 </h1>
                 <div class="form-group">

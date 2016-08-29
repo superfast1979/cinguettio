@@ -1,6 +1,6 @@
 body{
     padding-top: 70px;
-    background-image:url("sfondo.jpg");
+    background-image:url("../images/sfondo.jpg");
     color: white;
     text-width: bold;
     text-shadow: black 2px 2px 5px;

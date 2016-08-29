@@ -119,7 +119,7 @@ include("head.php");
     <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand"><img src="cinguettio logo-04.png" class="img-responsive"  alt="Responsive image" padding-top= "-10px" width="30px" height="30px"></a>
+                <a class="navbar-brand"><img src="images/cinguettio logo-04.png" class="img-responsive"  alt="Responsive image" padding-top= "-10px" width="30px" height="30px"></a>
             </div>
             <ul class="nav navbar-nav">
                 <li  class="active"><a href="Bacheca.php">Bacheca</a></li>
